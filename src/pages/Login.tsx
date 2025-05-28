@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -64,20 +63,7 @@ const Login = () => {
 
       if (error) {
         console.error('Login error:', error);
-        
-        // Verificar se o erro é de email não confirmado
-        if (error.message.includes('Email not confirmed') || 
-            error.message.includes('email_not_confirmed') ||
-            error.message === 'Invalid login credentials') {
-          setErrors({ 
-            general: 'Verifique seu email e clique no link de confirmação antes de fazer login. Verifique também sua caixa de spam.' 
-          });
-          toast.error('Email não confirmado. Verifique sua caixa de entrada.');
-        } else if (error.message.includes('Invalid login credentials')) {
-          setErrors({ general: 'E-mail ou senha incorretos' });
-        } else {
-          setErrors({ general: error.message || 'Erro ao fazer login' });
-        }
+        setErrors({ general: 'E-mail ou senha incorretos' });
         return;
       }
 
