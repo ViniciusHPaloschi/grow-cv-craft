@@ -73,16 +73,16 @@ const Modelos = () => {
         user_id: user.id,
         name: `Currículo - ${formData.nomeCompleto}`,
         model: selectedModel,
-        personal_info: {
+        personal_info: formData.nomeCompleto ? {
           nomeCompleto: formData.nomeCompleto,
           email: formData.email,
           telefone: formData.telefone,
           endereco: formData.endereco,
           objetivoProfissional: formData.objetivoProfissional
-        },
-        education: formData.formacoes,
-        experience: formData.experiencias,
-        courses: formData.cursos,
+        } as any : {},
+        education: formData.formacoes as any[],
+        experience: formData.experiencias as any[],
+        courses: formData.cursos as any[],
         skills: formData.habilidades
       };
 

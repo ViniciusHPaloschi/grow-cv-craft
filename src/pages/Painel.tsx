@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { Curriculum } from '@/types/curriculum';
+import { Curriculum, PersonalInfo, Education, Experience, Course } from '@/types/curriculum';
 import { toast } from 'sonner';
 
 const Painel = () => {
@@ -64,7 +63,17 @@ const Painel = () => {
         return;
       }
 
-      setCurriculums(data || []);
+      // Cast the data to our Curriculum type with proper type conversion
+      const typedCurriculums: Curriculum[] = (data || []).map(curriculum => ({
+        ...curriculum,
+        personal_info: curriculum.personal_info as PersonalInfo,
+        education: (curriculum.education || []) as Education[],
+        experience: (curriculum.experience || []) as Experience[],
+        courses: (curriculum.courses || []) as Course[],
+        skills: curriculum.skills || ''
+      }));
+
+      setCurriculums(typedCurriculums);
     } catch (error) {
       console.error('Erro ao carregar currículos:', error);
       toast.error('Erro ao carregar currículos');
