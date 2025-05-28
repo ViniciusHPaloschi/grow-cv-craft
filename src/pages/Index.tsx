@@ -1,12 +1,119 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-800">Grow CV</h1>
+            </div>
+            <div className="flex space-x-4">
+              <Link 
+                to="/login" 
+                className="px-4 py-2 text-blue-500 hover:text-blue-600 font-medium transition-colors"
+              >
+                Login
+              </Link>
+              <Link 
+                to="/cadastro" 
+                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Cadastro
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center">
+          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Crie seu currículo profissional
+            <span className="text-blue-500"> em minutos</span>
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Com o Grow CV, você pode criar currículos profissionais de forma rápida e fácil. 
+            Escolha entre diferentes modelos e personalize com seus dados.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              to="/formulario" 
+              className="px-8 py-4 bg-blue-500 text-white text-lg font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+              Começar Agora
+            </Link>
+            <Link 
+              to="/modelos" 
+              className="px-8 py-4 border-2 border-blue-500 text-blue-500 text-lg font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+            >
+              Ver Modelos
+            </Link>
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className="mt-20 grid md:grid-cols-3 gap-8">
+          <div className="text-center p-6">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Rápido e Fácil</h3>
+            <p className="text-gray-600">Crie seu currículo em poucos minutos com nosso formulário intuitivo.</p>
+          </div>
+          
+          <div className="text-center p-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Profissional</h3>
+            <p className="text-gray-600">Modelos criados por especialistas para impressionar recrutadores.</p>
+          </div>
+          
+          <div className="text-center p-6">
+            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Download PDF</h3>
+            <p className="text-gray-600">Baixe seu currículo em PDF de alta qualidade para enviar.</p>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="mt-20 bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
+          <h3 className="text-3xl font-bold text-gray-900 mb-4">
+            Pronto para criar seu currículo?
+          </h3>
+          <p className="text-lg text-gray-600 mb-8">
+            Junte-se a milhares de profissionais que já conseguiram suas vagas dos sonhos.
+          </p>
+          <Link 
+            to="/formulario" 
+            className="inline-block px-8 py-4 bg-green-500 text-white text-lg font-semibold rounded-lg hover:bg-green-600 transition-colors shadow-lg"
+          >
+            Começar Gratuitamente
+          </Link>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white py-8 mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p>&copy; 2024 Grow CV. Todos os direitos reservados.</p>
+        </div>
+      </footer>
     </div>
   );
 };
