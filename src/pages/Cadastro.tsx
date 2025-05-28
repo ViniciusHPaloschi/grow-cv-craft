@@ -1,18 +1,36 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface FormData {
+  nome: string;
+  email: string;
+  senha: string;
+  confirmarSenha: string;
+}
+
+interface Errors {
+  nome?: string;
+  email?: string;
+  senha?: string;
+  confirmarSenha?: string;
+  general?: string;
+}
 
 const Cadastro = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     nome: '',
     email: '',
     senha: '',
     confirmarSenha: ''
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Errors>({});
+  const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -21,7 +39,7 @@ const Cadastro = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Errors = {};
     
     if (!formData.nome.trim()) {
       newErrors.nome = 'Nome é obrigatório';
@@ -47,23 +65,35 @@ const Cadastro = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      // Simular cadastro
-      const users = JSON.parse(localStorage.getItem('growcv_users') || '[]');
-      const newUser = {
-        id: Date.now(),
-        nome: formData.nome,
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signUp({
         email: formData.email,
-        senha: formData.senha
-      };
-      users.push(newUser);
-      localStorage.setItem('growcv_users', JSON.stringify(users));
-      localStorage.setItem('growcv_current_user', JSON.stringify(newUser));
-      
-      alert('Cadastro realizado com sucesso!');
-      navigate('/painel');
+        password: formData.senha,
+        options: {
+          data: {
+            name: formData.nome
+          }
+        }
+      });
+
+      if (error) {
+        setErrors({ general: error.message });
+        return;
+      }
+
+      if (data.user) {
+        toast.success('Cadastro realizado com sucesso!');
+        navigate('/painel');
+      }
+    } catch (error) {
+      setErrors({ general: 'Erro interno. Tente novamente.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,6 +110,12 @@ const Cadastro = () => {
         {/* Form */}
         <div className="bg-white rounded-lg shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
+            {errors.general && (
+              <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                {errors.general}
+              </div>
+            )}
+
             <div>
               <label htmlFor="nome" className="block text-sm font-medium text-gray-700 mb-2">
                 Nome completo
@@ -154,9 +190,10 @@ const Cadastro = () => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
             >
-              Cadastrar
+              {loading ? 'Cadastrando...' : 'Cadastrar'}
             </button>
           </form>
 

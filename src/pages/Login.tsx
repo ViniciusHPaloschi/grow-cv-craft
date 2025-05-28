@@ -1,16 +1,30 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface FormData {
+  email: string;
+  senha: string;
+}
+
+interface Errors {
+  email?: string;
+  senha?: string;
+  general?: string;
+}
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     senha: ''
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Errors>({});
+  const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -19,7 +33,7 @@ const Login = () => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+    const newErrors: Errors = {};
     
     if (!formData.email.trim()) {
       newErrors.email = 'E-mail é obrigatório';
@@ -33,20 +47,30 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      // Simular login
-      const users = JSON.parse(localStorage.getItem('growcv_users') || '[]');
-      const user = users.find(u => u.email === formData.email && u.senha === formData.senha);
-      
-      if (user) {
-        localStorage.setItem('growcv_current_user', JSON.stringify(user));
-        alert('Login realizado com sucesso!');
-        navigate('/painel');
-      } else {
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.senha
+      });
+
+      if (error) {
         setErrors({ general: 'E-mail ou senha incorretos' });
+        return;
       }
+
+      if (data.user) {
+        toast.success('Login realizado com sucesso!');
+        navigate('/painel');
+      }
+    } catch (error) {
+      setErrors({ general: 'Erro interno. Tente novamente.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,9 +131,10 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              disabled={loading}
+              className="w-full py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
             >
-              Entrar
+              {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
 
