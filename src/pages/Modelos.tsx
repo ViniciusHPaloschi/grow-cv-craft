@@ -1,36 +1,157 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { FormData } from '@/types/curriculum';
+import { toast } from 'sonner';
 
 const Modelos = () => {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
+  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [formData, setFormData] = useState<FormData | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const handleModelSelection = (modelType) => {
-    localStorage.setItem('growcv_selected_model', modelType);
-    navigate('/visualizacao');
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/login');
+      return;
+    }
+
+    // Verificar se está editando
+    const editId = localStorage.getItem('growcv_editing_id');
+    if (editId) {
+      setIsEditing(true);
+    }
+
+    // Carregar dados do formulário
+    const savedData = localStorage.getItem('growcv_form_data');
+    if (!savedData) {
+      navigate('/formulario');
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(savedData);
+      setFormData(parsed);
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+      navigate('/formulario');
+    }
+
+    // Carregar modelo salvo
+    const savedModel = localStorage.getItem('growcv_selected_model');
+    if (savedModel) {
+      setSelectedModel(savedModel);
+    }
+  }, [user, loading, navigate]);
+
+  const handleModelSelect = (model: string) => {
+    setSelectedModel(model);
+    localStorage.setItem('growcv_selected_model', model);
   };
+
+  const handleContinue = async () => {
+    if (!selectedModel) {
+      toast.error('Por favor, selecione um modelo');
+      return;
+    }
+
+    if (!user || !formData) {
+      toast.error('Dados inválidos');
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      const editingId = localStorage.getItem('growcv_editing_id');
+      
+      const curriculumData = {
+        user_id: user.id,
+        name: `Currículo - ${formData.nomeCompleto}`,
+        model: selectedModel,
+        personal_info: {
+          nomeCompleto: formData.nomeCompleto,
+          email: formData.email,
+          telefone: formData.telefone,
+          endereco: formData.endereco,
+          objetivoProfissional: formData.objetivoProfissional
+        },
+        education: formData.formacoes,
+        experience: formData.experiencias,
+        courses: formData.cursos,
+        skills: formData.habilidades
+      };
+
+      if (isEditing && editingId) {
+        // Atualizar currículo existente
+        const { error } = await supabase
+          .from('curriculums')
+          .update(curriculumData)
+          .eq('id', editingId);
+
+        if (error) {
+          console.error('Erro ao atualizar currículo:', error);
+          toast.error('Erro ao atualizar currículo');
+          return;
+        }
+
+        toast.success('Currículo atualizado com sucesso!');
+        localStorage.removeItem('growcv_editing_id');
+      } else {
+        // Criar novo currículo
+        const { error } = await supabase
+          .from('curriculums')
+          .insert([curriculumData]);
+
+        if (error) {
+          console.error('Erro ao salvar currículo:', error);
+          toast.error('Erro ao salvar currículo');
+          return;
+        }
+
+        toast.success('Currículo criado com sucesso!');
+      }
+
+      // Ir para visualização
+      navigate('/visualizacao');
+    } catch (error) {
+      console.error('Erro ao processar currículo:', error);
+      toast.error('Erro ao processar currículo');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div>Carregando...</div>
+      </div>
+    );
+  }
 
   const models = [
     {
       id: 'classico',
       name: 'Clássico',
-      description: 'Design tradicional e elegante, ideal para áreas corporativas',
-      preview: 'bg-gradient-to-br from-gray-100 to-gray-200',
-      features: ['Layout tradicional', 'Tipografia clássica', 'Cores neutras']
+      description: 'Design tradicional e formal, ideal para áreas conservadoras',
+      preview: '📄'
     },
     {
       id: 'moderno',
       name: 'Moderno',
-      description: 'Design contemporâneo com elementos visuais atuais',
-      preview: 'bg-gradient-to-br from-blue-100 to-blue-200',
-      features: ['Design atual', 'Cores vibrantes', 'Layout dinâmico']
+      description: 'Layout contemporâneo com toques de cor, perfeito para startups',
+      preview: '🎨'
     },
     {
       id: 'criativo',
       name: 'Criativo',
-      description: 'Design inovador para profissionais de áreas criativas',
-      preview: 'bg-gradient-to-br from-green-100 to-green-200',
-      features: ['Visual único', 'Elementos gráficos', 'Estilo diferenciado']
+      description: 'Design ousado e diferenciado, ideal para áreas criativas',
+      preview: '✨'
     }
   ];
 
@@ -40,78 +161,109 @@ const Modelos = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="text-2xl font-bold text-gray-800">Grow CV</Link>
-          <h1 className="mt-4 text-3xl font-bold text-gray-900">Escolha seu modelo</h1>
-          <p className="mt-2 text-gray-600">Selecione o design que melhor representa seu perfil profissional</p>
+          <h1 className="mt-4 text-3xl font-bold text-gray-900">Escolha seu Modelo</h1>
+          <p className="mt-2 text-gray-600">Selecione o modelo que melhor representa seu perfil profissional</p>
         </div>
 
         {/* Models Grid */}
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {models.map((model) => (
-            <div key={model.id} className="bg-white rounded-lg shadow-xl overflow-hidden hover:shadow-2xl transition-shadow">
+            <div
+              key={model.id}
+              className={`bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transition-all duration-200 ${
+                selectedModel === model.id
+                  ? 'ring-4 ring-blue-500 transform scale-105'
+                  : 'hover:shadow-xl hover:transform hover:scale-102'
+              }`}
+              onClick={() => handleModelSelect(model.id)}
+            >
               {/* Preview */}
-              <div className={`h-64 ${model.preview} p-4`}>
-                <div className="bg-white rounded-lg p-4 h-full shadow-inner">
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-                    <div className="h-2 bg-gray-200 rounded w-1/2"></div>
-                    <div className="h-2 bg-gray-200 rounded w-2/3"></div>
-                    <div className="mt-4 space-y-1">
-                      <div className="h-2 bg-gray-200 rounded"></div>
-                      <div className="h-2 bg-gray-200 rounded"></div>
-                      <div className="h-2 bg-gray-200 rounded w-4/5"></div>
-                    </div>
-                    <div className="mt-4">
-                      <div className="h-3 bg-gray-300 rounded w-1/3"></div>
-                      <div className="mt-2 space-y-1">
-                        <div className="h-2 bg-gray-200 rounded"></div>
-                        <div className="h-2 bg-gray-200 rounded w-3/4"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                <div className="text-6xl">{model.preview}</div>
               </div>
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{model.name}</h3>
-                <p className="text-gray-600 mb-4">{model.description}</p>
-                
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Características:</h4>
-                  <ul className="text-sm text-gray-600 space-y-1">
-                    {model.features.map((feature, index) => (
-                      <li key={index} className="flex items-center">
-                        <svg className="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900">{model.name}</h3>
+                  {selectedModel === model.id && (
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                      <div className="w-3 h-3 bg-white rounded-full"></div>
+                    </div>
+                  )}
+                </div>
+                <p className="text-gray-600 text-sm">{model.description}</p>
+
+                {/* Features */}
+                <div className="mt-4 space-y-1">
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    Layout responsivo
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    Exportação PDF
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    Fácil personalização
+                  </div>
                 </div>
 
-                <button
-                  onClick={() => handleModelSelection(model.id)}
-                  className="w-full py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  Escolher este modelo
-                </button>
+                {selectedModel === model.id && (
+                  <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-blue-800 text-sm font-medium">✓ Modelo selecionado</p>
+                  </div>
+                )}
               </div>
             </div>
           ))}
         </div>
 
+        {/* Preview Section */}
+        {selectedModel && (
+          <div className="bg-white rounded-lg shadow-xl p-8 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
+              Preview do Modelo {models.find(m => m.id === selectedModel)?.name}
+            </h2>
+            
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+              <div className="text-4xl mb-4">
+                {models.find(m => m.id === selectedModel)?.preview}
+              </div>
+              <h3 className="text-lg font-medium text-gray-700 mb-2">
+                {formData?.nomeCompleto || 'Seu Nome Aqui'}
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {formData?.email || 'seu@email.com'} • {formData?.telefone || '(00) 00000-0000'}
+              </p>
+              <div className="text-sm text-gray-500 max-w-md mx-auto">
+                {formData?.objetivoProfissional || 'Seu objetivo profissional aparecerá aqui...'}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Navigation */}
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <Link
             to="/formulario"
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium"
           >
-            ← Voltar aos dados
+            ← Voltar aos Dados
           </Link>
-          <div className="text-gray-500 text-sm flex items-center">
-            Passo 2 de 3
-          </div>
+
+          <button
+            onClick={handleContinue}
+            disabled={!selectedModel || saving}
+            className={`px-8 py-3 font-semibold rounded-lg transition-colors ${
+              selectedModel && !saving
+                ? 'bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            }`}
+          >
+            {saving ? 'Salvando...' : (isEditing ? 'Atualizar Currículo →' : 'Gerar Currículo →')}
+          </button>
         </div>
       </div>
     </div>

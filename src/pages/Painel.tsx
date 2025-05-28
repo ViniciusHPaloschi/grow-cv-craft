@@ -1,62 +1,160 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { Curriculum } from '@/types/curriculum';
+import { toast } from 'sonner';
 
 const Painel = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [curriculums, setCurriculums] = useState([]);
+  const { user, loading, signOut } = useAuth();
+  const [userProfile, setUserProfile] = useState<{ name: string } | null>(null);
+  const [curriculums, setCurriculums] = useState<Curriculum[]>([]);
+  const [loadingCurriculums, setLoadingCurriculums] = useState(true);
   const [showProfileEdit, setShowProfileEdit] = useState(false);
 
   useEffect(() => {
-    const currentUser = localStorage.getItem('growcv_current_user');
-    if (!currentUser) {
+    if (!loading && !user) {
       navigate('/login');
       return;
     }
     
-    setUser(JSON.parse(currentUser));
-    loadCurriculums();
-  }, [navigate]);
+    if (user) {
+      loadUserProfile();
+      loadCurriculums();
+    }
+  }, [user, loading, navigate]);
 
-  const loadCurriculums = () => {
-    const savedCurriculums = localStorage.getItem('growcv_curriculums');
-    if (savedCurriculums) {
-      setCurriculums(JSON.parse(savedCurriculums));
+  const loadUserProfile = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('name')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Erro ao carregar perfil:', error);
+        return;
+      }
+
+      setUserProfile(data);
+    } catch (error) {
+      console.error('Erro ao carregar perfil:', error);
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('growcv_current_user');
-    navigate('/');
-  };
+  const loadCurriculums = async () => {
+    if (!user) return;
+    
+    try {
+      setLoadingCurriculums(true);
+      const { data, error } = await supabase
+        .from('curriculums')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
 
-  const deleteCurriculum = (id) => {
-    if (confirm('Tem certeza que deseja excluir este currículo?')) {
-      const updatedCurriculums = curriculums.filter(cv => cv.id !== id);
-      setCurriculums(updatedCurriculums);
-      localStorage.setItem('growcv_curriculums', JSON.stringify(updatedCurriculums));
+      if (error) {
+        console.error('Erro ao carregar currículos:', error);
+        toast.error('Erro ao carregar currículos');
+        return;
+      }
+
+      setCurriculums(data || []);
+    } catch (error) {
+      console.error('Erro ao carregar currículos:', error);
+      toast.error('Erro ao carregar currículos');
+    } finally {
+      setLoadingCurriculums(false);
     }
   };
 
-  const editCurriculum = (curriculum) => {
-    localStorage.setItem('growcv_form_data', JSON.stringify(curriculum.data));
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast.success('Logout realizado com sucesso!');
+      navigate('/');
+    } catch (error) {
+      console.error('Erro no logout:', error);
+      toast.error('Erro ao fazer logout');
+    }
+  };
+
+  const deleteCurriculum = async (id: string) => {
+    if (!confirm('Tem certeza que deseja excluir este currículo?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('curriculums')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        console.error('Erro ao excluir currículo:', error);
+        toast.error('Erro ao excluir currículo');
+        return;
+      }
+
+      setCurriculums(prev => prev.filter(cv => cv.id !== id));
+      toast.success('Currículo excluído com sucesso!');
+    } catch (error) {
+      console.error('Erro ao excluir currículo:', error);
+      toast.error('Erro ao excluir currículo');
+    }
+  };
+
+  const editCurriculum = (curriculum: Curriculum) => {
+    // Preparar dados para edição
+    const formData = {
+      nomeCompleto: curriculum.personal_info.nomeCompleto,
+      email: curriculum.personal_info.email,
+      telefone: curriculum.personal_info.telefone,
+      endereco: curriculum.personal_info.endereco,
+      objetivoProfissional: curriculum.personal_info.objetivoProfissional,
+      formacoes: curriculum.education,
+      experiencias: curriculum.experience,
+      cursos: curriculum.courses,
+      habilidades: curriculum.skills
+    };
+
+    localStorage.setItem('growcv_form_data', JSON.stringify(formData));
     localStorage.setItem('growcv_selected_model', curriculum.model);
+    localStorage.setItem('growcv_editing_id', curriculum.id);
     navigate('/formulario');
   };
 
-  const viewCurriculum = (curriculum) => {
-    localStorage.setItem('growcv_form_data', JSON.stringify(curriculum.data));
+  const viewCurriculum = (curriculum: Curriculum) => {
+    const formData = {
+      nomeCompleto: curriculum.personal_info.nomeCompleto,
+      email: curriculum.personal_info.email,
+      telefone: curriculum.personal_info.telefone,
+      endereco: curriculum.personal_info.endereco,
+      objetivoProfissional: curriculum.personal_info.objetivoProfissional,
+      formacoes: curriculum.education,
+      experiencias: curriculum.experience,
+      cursos: curriculum.courses,
+      habilidades: curriculum.skills
+    };
+
+    localStorage.setItem('growcv_form_data', JSON.stringify(formData));
     localStorage.setItem('growcv_selected_model', curriculum.model);
     navigate('/visualizacao');
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR');
   };
 
-  if (!user) {
-    return <div>Carregando...</div>;
+  if (loading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div>Carregando...</div>
+      </div>
+    );
   }
 
   return (
@@ -67,7 +165,7 @@ const Painel = () => {
           <div className="flex justify-between items-center">
             <Link to="/" className="text-2xl font-bold text-gray-800">Grow CV</Link>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-600">Olá, {user.nome}</span>
+              <span className="text-gray-600">Olá, {userProfile?.name || 'Usuário'}</span>
               <button
                 onClick={() => setShowProfileEdit(!showProfileEdit)}
                 className="px-4 py-2 text-blue-500 hover:text-blue-600 font-medium"
@@ -90,13 +188,13 @@ const Painel = () => {
         {showProfileEdit && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-              <h3 className="text-xl font-semibold mb-4">Editar Perfil</h3>
+              <h3 className="text-xl font-semibold mb-4">Informações do Perfil</h3>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
                   <input
                     type="text"
-                    value={user.nome}
+                    value={userProfile?.name || ''}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     readOnly
                   />
@@ -105,7 +203,7 @@ const Painel = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
                   <input
                     type="email"
-                    value={user.email}
+                    value={user.email || ''}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     readOnly
                   />
@@ -162,7 +260,11 @@ const Painel = () => {
             <h2 className="text-xl font-semibold text-gray-900">Meus Currículos</h2>
           </div>
 
-          {curriculums.length === 0 ? (
+          {loadingCurriculums ? (
+            <div className="p-8 text-center">
+              <div>Carregando currículos...</div>
+            </div>
+          ) : curriculums.length === 0 ? (
             <div className="p-8 text-center">
               <div className="text-6xl mb-4">📄</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">Nenhum currículo criado ainda</h3>
@@ -185,8 +287,8 @@ const Painel = () => {
                       </h3>
                       <div className="flex items-center text-sm text-gray-600 space-x-4">
                         <span>Modelo: <span className="capitalize">{curriculum.model}</span></span>
-                        <span>Criado em: {formatDate(curriculum.createdAt)}</span>
-                        <span>Nome: {curriculum.data.nomeCompleto}</span>
+                        <span>Criado em: {formatDate(curriculum.created_at)}</span>
+                        <span>Nome: {curriculum.personal_info.nomeCompleto}</span>
                       </div>
                     </div>
                     
@@ -223,17 +325,26 @@ const Painel = () => {
             <div className="bg-white p-6 rounded-lg shadow text-center">
               <h3 className="text-lg font-semibold text-gray-700 mb-2">Modelo Mais Usado</h3>
               <p className="text-2xl font-bold text-blue-500 capitalize">
-                {curriculums.reduce((acc, curr) => {
-                  acc[curr.model] = (acc[curr.model] || 0) + 1;
-                  return acc;
-                }, {})}
+                {(() => {
+                  const modelCount = curriculums.reduce((acc, curr) => {
+                    acc[curr.model] = (acc[curr.model] || 0) + 1;
+                    return acc;
+                  }, {} as Record<string, number>);
+                  
+                  const mostUsed = Object.keys(modelCount).reduce((a, b) => 
+                    modelCount[a] > modelCount[b] ? a : b, 
+                    Object.keys(modelCount)[0] || 'Nenhum'
+                  );
+                  
+                  return mostUsed;
+                })()}
               </p>
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow text-center">
               <h3 className="text-lg font-semibold text-gray-700 mb-2">Último Criado</h3>
               <p className="text-lg text-gray-600">
-                {curriculums.length > 0 && formatDate(curriculums[curriculums.length - 1].createdAt)}
+                {formatDate(curriculums[0]?.created_at || new Date().toISOString())}
               </p>
             </div>
 
