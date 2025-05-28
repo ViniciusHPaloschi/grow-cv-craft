@@ -66,10 +66,10 @@ const Painel = () => {
       // Cast the data to our Curriculum type with proper type conversion
       const typedCurriculums: Curriculum[] = (data || []).map(curriculum => ({
         ...curriculum,
-        personal_info: curriculum.personal_info as PersonalInfo,
-        education: (curriculum.education || []) as Education[],
-        experience: (curriculum.experience || []) as Experience[],
-        courses: (curriculum.courses || []) as Course[],
+        personal_info: curriculum.personal_info as unknown as PersonalInfo,
+        education: (curriculum.education || []) as unknown as Education[],
+        experience: (curriculum.experience || []) as unknown as Experience[],
+        courses: (curriculum.courses || []) as unknown as Course[],
         skills: curriculum.skills || ''
       }));
 

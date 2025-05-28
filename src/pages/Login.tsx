@@ -52,22 +52,42 @@ const Login = () => {
     if (!validateForm()) return;
 
     setLoading(true);
+    setErrors({});
+    
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.senha
       });
 
+      console.log('Login response:', { data, error });
+
       if (error) {
-        setErrors({ general: 'E-mail ou senha incorretos' });
+        console.error('Login error:', error);
+        
+        // Verificar se o erro é de email não confirmado
+        if (error.message.includes('Email not confirmed') || 
+            error.message.includes('email_not_confirmed') ||
+            error.message === 'Invalid login credentials') {
+          setErrors({ 
+            general: 'Verifique seu email e clique no link de confirmação antes de fazer login. Verifique também sua caixa de spam.' 
+          });
+          toast.error('Email não confirmado. Verifique sua caixa de entrada.');
+        } else if (error.message.includes('Invalid login credentials')) {
+          setErrors({ general: 'E-mail ou senha incorretos' });
+        } else {
+          setErrors({ general: error.message || 'Erro ao fazer login' });
+        }
         return;
       }
 
       if (data.user) {
+        console.log('Login successful:', data.user);
         toast.success('Login realizado com sucesso!');
         navigate('/painel');
       }
     } catch (error) {
+      console.error('Erro no login:', error);
       setErrors({ general: 'Erro interno. Tente novamente.' });
     } finally {
       setLoading(false);
