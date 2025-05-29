@@ -1,14 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { FormData } from '@/types/curriculum';
+import { generatePDF } from '@/utils/pdfGenerator';
+import { toast } from 'sonner';
 
 const Visualizacao = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [formData, setFormData] = useState<FormData | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>('');
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -39,9 +41,25 @@ const Visualizacao = () => {
     navigate('/formulario');
   };
 
-  const handleDownloadPDF = () => {
-    // Placeholder para funcionalidade de download
-    alert('Funcionalidade de download PDF será implementada em breve!');
+  const handleDownloadPDF = async () => {
+    if (!formData) {
+      toast.error('Dados do currículo não encontrados');
+      return;
+    }
+
+    setIsGeneratingPDF(true);
+    toast.info('Gerando PDF... Aguarde um momento.');
+
+    try {
+      const fileName = `curriculo-${formData.nomeCompleto.replace(/\s+/g, '-').toLowerCase()}`;
+      await generatePDF('curriculum-content', fileName);
+      toast.success('PDF baixado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      toast.error('Erro ao gerar PDF. Tente novamente.');
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   if (loading || !formData) {
@@ -383,15 +401,22 @@ const Visualizacao = () => {
           
           <button
             onClick={handleDownloadPDF}
-            className="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-colors"
+            disabled={isGeneratingPDF}
+            className={`px-6 py-3 font-semibold rounded-lg transition-colors ${
+              isGeneratingPDF
+                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                : 'bg-green-500 text-white hover:bg-green-600'
+            }`}
           >
-            📄 Download PDF
+            {isGeneratingPDF ? '⏳ Gerando PDF...' : '📄 Download PDF'}
           </button>
         </div>
 
         {/* Curriculum Preview */}
         <div className="bg-white rounded-lg shadow-xl p-8 mb-8">
-          {renderCurriculum()}
+          <div id="curriculum-content">
+            {renderCurriculum()}
+          </div>
         </div>
 
         {/* Navigation */}
