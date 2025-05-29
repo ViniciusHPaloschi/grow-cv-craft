@@ -35,34 +35,42 @@ const Formulario = () => {
     const editId = localStorage.getItem('growcv_editing_id');
     const savedData = localStorage.getItem('growcv_form_data');
     
+    console.log('Verificando modo de operação...');
     console.log('Edit ID:', editId);
     console.log('Saved Data exists:', !!savedData);
     
     if (editId && savedData) {
       // Modo de edição - carregar dados salvos
-      console.log('Carregando dados para edição');
+      console.log('Modo de edição detectado - carregando dados');
       setIsEditing(true);
       setEditingId(editId);
       
       try {
         const parsed = JSON.parse(savedData);
-        console.log('Dados carregados:', parsed);
+        console.log('Dados carregados para edição:', parsed);
         setFormData(parsed);
       } catch (error) {
         console.error('Erro ao carregar dados salvos:', error);
+        // Em caso de erro, resetar para modo de criação
+        setIsEditing(false);
+        setEditingId(null);
       }
       
       // Remover o ID de edição do localStorage após carregar os dados
       localStorage.removeItem('growcv_editing_id');
-    } else if (savedData && !editId) {
-      // Se existe dados salvos mas não é edição, limpar os dados
-      console.log('Limpando dados salvos (não é edição)');
-      localStorage.removeItem('growcv_form_data');
     } else {
-      // Modo de criação - garantir que campos estejam vazios
-      console.log('Modo de criação - zerando dados');
+      // Modo de criação - verificar se existe dados que devem ser limpos
+      console.log('Modo de criação - iniciando com dados limpos');
       setIsEditing(false);
       setEditingId(null);
+      
+      // Se existe dados salvos mas não é edição, limpar
+      if (savedData && !editId) {
+        console.log('Limpando dados salvos (não é edição)');
+        localStorage.removeItem('growcv_form_data');
+      }
+      
+      // Garantir que o formulário comece vazio
       setFormData({
         nomeCompleto: '',
         email: '',

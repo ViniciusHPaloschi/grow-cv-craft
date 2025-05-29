@@ -38,6 +38,23 @@ const Visualizacao = () => {
   }, [user, loading, navigate]);
 
   const handleEdit = () => {
+    if (!formData) {
+      toast.error('Dados do currículo não encontrados');
+      return;
+    }
+
+    // Gerar um ID único para esta edição
+    const editId = Date.now().toString();
+    
+    console.log('Iniciando edição, salvando dados no localStorage');
+    console.log('Form data para edição:', formData);
+    console.log('Edit ID:', editId);
+    
+    // Salvar os dados atuais e o ID de edição no localStorage
+    localStorage.setItem('growcv_form_data', JSON.stringify(formData));
+    localStorage.setItem('growcv_editing_id', editId);
+    
+    // Navegar para o formulário
     navigate('/formulario');
   };
 
