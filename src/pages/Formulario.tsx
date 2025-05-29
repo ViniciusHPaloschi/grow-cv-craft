@@ -35,25 +35,46 @@ const Formulario = () => {
     const editId = localStorage.getItem('growcv_editing_id');
     const savedData = localStorage.getItem('growcv_form_data');
     
+    console.log('Edit ID:', editId);
+    console.log('Saved Data exists:', !!savedData);
+    
     if (editId && savedData) {
       // Modo de edição - carregar dados salvos
+      console.log('Carregando dados para edição');
       setIsEditing(true);
       setEditingId(editId);
       
       try {
         const parsed = JSON.parse(savedData);
+        console.log('Dados carregados:', parsed);
         setFormData(parsed);
       } catch (error) {
         console.error('Erro ao carregar dados salvos:', error);
       }
       
-      // Limpar o ID de edição do localStorage após carregar
+      // Remover o ID de edição do localStorage após carregar os dados
       localStorage.removeItem('growcv_editing_id');
+    } else if (savedData && !editId) {
+      // Se existe dados salvos mas não é edição, limpar os dados
+      console.log('Limpando dados salvos (não é edição)');
+      localStorage.removeItem('growcv_form_data');
     } else {
-      // Modo de criação - manter campos vazios
+      // Modo de criação - garantir que campos estejam vazios
+      console.log('Modo de criação - zerando dados');
       setIsEditing(false);
       setEditingId(null);
-      // Não modificar formData aqui, manter o estado inicial vazio
+      setFormData({
+        nomeCompleto: '',
+        email: '',
+        telefone: '',
+        endereco: '',
+        objetivoProfissional: '',
+        fotoUrl: undefined,
+        formacoes: [],
+        experiencias: [],
+        cursos: [],
+        habilidades: ''
+      });
     }
   }, [user, loading, navigate]);
 
