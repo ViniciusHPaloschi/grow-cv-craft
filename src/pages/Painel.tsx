@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -124,6 +125,7 @@ const Painel = () => {
       telefone: curriculum.personal_info.telefone,
       endereco: curriculum.personal_info.endereco,
       objetivoProfissional: curriculum.personal_info.objetivoProfissional,
+      fotoUrl: curriculum.personal_info.fotoUrl,
       formacoes: curriculum.education,
       experiencias: curriculum.experience,
       cursos: curriculum.courses,
@@ -136,6 +138,14 @@ const Painel = () => {
     navigate('/formulario');
   };
 
+  const createNewCurriculum = () => {
+    // Limpar dados salvos para garantir formulário vazio
+    localStorage.removeItem('growcv_form_data');
+    localStorage.removeItem('growcv_selected_model');
+    localStorage.removeItem('growcv_editing_id');
+    navigate('/formulario');
+  };
+
   const viewCurriculum = (curriculum: Curriculum) => {
     const formData = {
       nomeCompleto: curriculum.personal_info.nomeCompleto,
@@ -143,6 +153,7 @@ const Painel = () => {
       telefone: curriculum.personal_info.telefone,
       endereco: curriculum.personal_info.endereco,
       objetivoProfissional: curriculum.personal_info.objetivoProfissional,
+      fotoUrl: curriculum.personal_info.fotoUrl,
       formacoes: curriculum.education,
       experiencias: curriculum.experience,
       cursos: curriculum.courses,
@@ -238,14 +249,14 @@ const Painel = () => {
 
         {/* Quick Actions */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <Link
-            to="/formulario"
+          <button
+            onClick={createNewCurriculum}
             className="bg-blue-500 text-white p-6 rounded-lg hover:bg-blue-600 transition-colors text-center"
           >
             <div className="text-3xl mb-2">➕</div>
             <h3 className="text-xl font-semibold mb-2">Criar Novo Currículo</h3>
             <p className="text-blue-100">Comece um novo currículo do zero</p>
-          </Link>
+          </button>
 
           <div className="bg-white p-6 rounded-lg shadow text-center">
             <div className="text-3xl mb-2">📄</div>
@@ -278,12 +289,12 @@ const Painel = () => {
               <div className="text-6xl mb-4">📄</div>
               <h3 className="text-xl font-semibold text-gray-700 mb-2">Nenhum currículo criado ainda</h3>
               <p className="text-gray-500 mb-4">Crie seu primeiro currículo profissional agora</p>
-              <Link
-                to="/formulario"
+              <button
+                onClick={createNewCurriculum}
                 className="inline-block px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
               >
                 Criar Primeiro Currículo
-              </Link>
+              </button>
             </div>
           ) : (
             <div className="divide-y divide-gray-200">
@@ -359,12 +370,12 @@ const Painel = () => {
 
             <div className="bg-white p-6 rounded-lg shadow text-center">
               <h3 className="text-lg font-semibold text-gray-700 mb-2">Próxima Ação</h3>
-              <Link
-                to="/formulario"
+              <button
+                onClick={createNewCurriculum}
                 className="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
               >
                 Criar Novo
-              </Link>
+              </button>
             </div>
           </div>
         )}
