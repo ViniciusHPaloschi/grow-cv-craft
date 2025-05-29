@@ -1,8 +1,11 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 
 const Index = () => {
+  const { redirectToFormulario, redirectToModelos } = useAuthRedirect();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50">
       {/* Header */}
@@ -43,18 +46,18 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              to="/formulario" 
+            <button 
+              onClick={redirectToFormulario}
               className="px-8 py-4 bg-blue-500 text-white text-lg font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               Começar Agora
-            </Link>
-            <Link 
-              to="/modelos" 
+            </button>
+            <button 
+              onClick={redirectToModelos}
               className="px-8 py-4 border-2 border-blue-500 text-blue-500 text-lg font-semibold rounded-lg hover:bg-blue-50 transition-colors"
             >
               Ver Modelos
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -99,12 +102,12 @@ const Index = () => {
           <p className="text-lg text-gray-600 mb-8">
             Junte-se a milhares de profissionais que já conseguiram suas vagas dos sonhos.
           </p>
-          <Link 
-            to="/formulario" 
+          <button 
+            onClick={redirectToFormulario}
             className="inline-block px-8 py-4 bg-green-500 text-white text-lg font-semibold rounded-lg hover:bg-green-600 transition-colors shadow-lg"
           >
             Começar Gratuitamente
-          </Link>
+          </button>
         </div>
       </main>
 
