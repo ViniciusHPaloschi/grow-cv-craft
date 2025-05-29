@@ -74,6 +74,15 @@ const Visualizacao = () => {
     <div className="bg-white p-8 max-w-4xl mx-auto shadow-lg">
       {/* Header */}
       <div className="text-center border-b-2 border-gray-300 pb-6 mb-6">
+        {formData.fotoUrl && (
+          <div className="flex justify-center mb-4">
+            <img
+              src={formData.fotoUrl}
+              alt="Foto de perfil"
+              className="w-32 h-32 rounded-full object-cover border-4 border-gray-300"
+            />
+          </div>
+        )}
         <h1 className="text-3xl font-bold text-gray-800 mb-2">{formData.nomeCompleto}</h1>
         <div className="text-gray-600 space-y-1">
           <p>{formData.email} • {formData.telefone}</p>
@@ -172,10 +181,21 @@ const Visualizacao = () => {
     <div className="bg-white max-w-4xl mx-auto shadow-lg overflow-hidden">
       {/* Header com cor */}
       <div className="bg-blue-500 text-white p-8">
-        <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
-        <div className="space-y-1 text-blue-100">
-          <p>{formData.email} • {formData.telefone}</p>
-          <p>{formData.endereco}</p>
+        <div className="flex items-center gap-6">
+          {formData.fotoUrl && (
+            <img
+              src={formData.fotoUrl}
+              alt="Foto de perfil"
+              className="w-24 h-24 rounded-full object-cover border-4 border-white"
+            />
+          )}
+          <div className="flex-1">
+            <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
+            <div className="space-y-1 text-blue-100">
+              <p>{formData.email} • {formData.telefone}</p>
+              <p>{formData.endereco}</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -276,11 +296,20 @@ const Visualizacao = () => {
       <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-8 relative">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -ml-12 -mb-12"></div>
-        <div className="relative z-10">
-          <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
-          <div className="space-y-1 text-purple-100">
-            <p>{formData.email} • {formData.telefone}</p>
-            <p>{formData.endereco}</p>
+        <div className="relative z-10 flex items-center gap-6">
+          {formData.fotoUrl && (
+            <img
+              src={formData.fotoUrl}
+              alt="Foto de perfil"
+              className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg"
+            />
+          )}
+          <div className="flex-1">
+            <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
+            <div className="space-y-1 text-purple-100">
+              <p>{formData.email} • {formData.telefone}</p>
+              <p>{formData.endereco}</p>
+            </div>
           </div>
         </div>
       </div>
