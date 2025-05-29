@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -34,37 +33,27 @@ const Formulario = () => {
 
     // Verificar se está editando
     const editId = localStorage.getItem('growcv_editing_id');
-    if (editId) {
+    const savedData = localStorage.getItem('growcv_form_data');
+    
+    if (editId && savedData) {
+      // Modo de edição - carregar dados salvos
       setIsEditing(true);
       setEditingId(editId);
-      localStorage.removeItem('growcv_editing_id');
       
-      // Carregar dados salvos apenas se estiver editando
-      const savedData = localStorage.getItem('growcv_form_data');
-      if (savedData) {
-        try {
-          const parsed = JSON.parse(savedData);
-          setFormData(parsed);
-        } catch (error) {
-          console.error('Erro ao carregar dados salvos:', error);
-        }
+      try {
+        const parsed = JSON.parse(savedData);
+        setFormData(parsed);
+      } catch (error) {
+        console.error('Erro ao carregar dados salvos:', error);
       }
+      
+      // Limpar o ID de edição do localStorage após carregar
+      localStorage.removeItem('growcv_editing_id');
     } else {
-      // Se não está editando, manter os campos vazios
+      // Modo de criação - manter campos vazios
       setIsEditing(false);
       setEditingId(null);
-      setFormData({
-        nomeCompleto: '',
-        email: '',
-        telefone: '',
-        endereco: '',
-        objetivoProfissional: '',
-        fotoUrl: undefined,
-        formacoes: [],
-        experiencias: [],
-        cursos: [],
-        habilidades: ''
-      });
+      // Não modificar formData aqui, manter o estado inicial vazio
     }
   }, [user, loading, navigate]);
 
