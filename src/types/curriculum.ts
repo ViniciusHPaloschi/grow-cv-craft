@@ -5,6 +5,7 @@ export interface PersonalInfo {
   telefone: string;
   endereco: string;
   objetivoProfissional: string;
+  fotoUrl?: string;
 }
 
 export interface Education {
@@ -37,6 +38,7 @@ export interface FormData {
   telefone: string;
   endereco: string;
   objetivoProfissional: string;
+  fotoUrl?: string;
   formacoes: Education[];
   experiencias: Experience[];
   cursos: Course[];

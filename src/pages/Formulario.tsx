@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { FormData, Education, Experience, Course } from '@/types/curriculum';
 import { toast } from 'sonner';
+import ProfilePhotoUpload from '@/components/ProfilePhotoUpload';
 
 const Formulario = () => {
   const navigate = useNavigate();
@@ -18,6 +18,7 @@ const Formulario = () => {
     telefone: '',
     endereco: '',
     objetivoProfissional: '',
+    fotoUrl: undefined,
     formacoes: [],
     experiencias: [],
     cursos: [],
@@ -55,6 +56,13 @@ const Formulario = () => {
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handlePhotoChange = (photoUrl: string | undefined) => {
+    setFormData(prev => ({
+      ...prev,
+      fotoUrl: photoUrl
     }));
   };
 
@@ -202,6 +210,15 @@ const Formulario = () => {
         {/* Form */}
         <div className="bg-white rounded-lg shadow-xl p-8">
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Foto de Perfil */}
+            <div className="border-b border-gray-200 pb-8">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">Foto de Perfil</h2>
+              <ProfilePhotoUpload 
+                currentPhotoUrl={formData.fotoUrl}
+                onPhotoChange={handlePhotoChange}
+              />
+            </div>
+
             {/* Informações Pessoais */}
             <div className="border-b border-gray-200 pb-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Informações Pessoais</h2>
