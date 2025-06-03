@@ -14,7 +14,7 @@ const Index = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <img 
-                src="/lovable-uploads/2ad54e9a-a63d-4459-8ce4-040fd6ff385d.png" 
+                src="/lovable-uploads/5fe141ed-a11c-4e31-85cc-a650afdddec2.png" 
                 alt="Grow CV Logo" 
                 className="h-10 w-10"
               />
