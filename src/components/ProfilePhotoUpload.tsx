@@ -56,7 +56,24 @@ const ProfilePhotoUpload = ({ currentPhotoUrl, onPhotoChange }: ProfilePhotoUplo
         .from('profile-photos')
         .getPublicUrl(fileName);
 
+      console.log('Foto carregada com sucesso:', data.publicUrl);
+      
+      // Atualizar o estado do componente pai
       onPhotoChange(data.publicUrl);
+      
+      // Salvar também no localStorage para garantir persistência
+      const existingData = localStorage.getItem('growcv_form_data');
+      if (existingData) {
+        try {
+          const formData = JSON.parse(existingData);
+          formData.fotoUrl = data.publicUrl;
+          localStorage.setItem('growcv_form_data', JSON.stringify(formData));
+          console.log('Foto salva no localStorage:', data.publicUrl);
+        } catch (error) {
+          console.error('Erro ao salvar foto no localStorage:', error);
+        }
+      }
+      
       toast.success('Foto de perfil carregada com sucesso!');
     } catch (error) {
       console.error('Erro ao fazer upload:', error);
@@ -67,7 +84,22 @@ const ProfilePhotoUpload = ({ currentPhotoUrl, onPhotoChange }: ProfilePhotoUplo
   };
 
   const removePhoto = () => {
+    console.log('Removendo foto de perfil');
     onPhotoChange(undefined);
+    
+    // Remover também do localStorage
+    const existingData = localStorage.getItem('growcv_form_data');
+    if (existingData) {
+      try {
+        const formData = JSON.parse(existingData);
+        delete formData.fotoUrl;
+        localStorage.setItem('growcv_form_data', JSON.stringify(formData));
+        console.log('Foto removida do localStorage');
+      } catch (error) {
+        console.error('Erro ao remover foto do localStorage:', error);
+      }
+    }
+    
     toast.success('Foto de perfil removida');
   };
 

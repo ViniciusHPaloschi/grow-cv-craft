@@ -22,13 +22,20 @@ const Visualizacao = () => {
     const savedData = localStorage.getItem('growcv_form_data');
     const savedModel = localStorage.getItem('growcv_selected_model');
 
+    console.log('Carregando dados na visualização...');
+    console.log('Dados salvos:', savedData);
+    console.log('Modelo salvo:', savedModel);
+
     if (!savedData || !savedModel) {
+      console.log('Dados não encontrados, redirecionando para formulário');
       navigate('/formulario');
       return;
     }
 
     try {
       const parsed = JSON.parse(savedData);
+      console.log('Dados parseados:', parsed);
+      console.log('URL da foto:', parsed.fotoUrl);
       setFormData(parsed);
       setSelectedModel(savedModel);
     } catch (error) {
@@ -97,6 +104,13 @@ const Visualizacao = () => {
               src={formData.fotoUrl}
               alt="Foto de perfil"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-300"
+              onError={(e) => {
+                console.error('Erro ao carregar imagem:', formData.fotoUrl);
+                e.currentTarget.style.display = 'none';
+              }}
+              onLoad={() => {
+                console.log('Imagem carregada com sucesso:', formData.fotoUrl);
+              }}
             />
           </div>
         )}
@@ -204,6 +218,13 @@ const Visualizacao = () => {
               src={formData.fotoUrl}
               alt="Foto de perfil"
               className="w-24 h-24 rounded-full object-cover border-4 border-white"
+              onError={(e) => {
+                console.error('Erro ao carregar imagem:', formData.fotoUrl);
+                e.currentTarget.style.display = 'none';
+              }}
+              onLoad={() => {
+                console.log('Imagem carregada com sucesso:', formData.fotoUrl);
+              }}
             />
           )}
           <div className="flex-1">
@@ -319,6 +340,13 @@ const Visualizacao = () => {
               src={formData.fotoUrl}
               alt="Foto de perfil"
               className="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg"
+              onError={(e) => {
+                console.error('Erro ao carregar imagem:', formData.fotoUrl);
+                e.currentTarget.style.display = 'none';
+              }}
+              onLoad={() => {
+                console.log('Imagem carregada com sucesso:', formData.fotoUrl);
+              }}
             />
           )}
           <div className="flex-1">
