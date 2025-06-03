@@ -12,7 +12,12 @@ const Index = () => {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-3">
+              <img 
+                src="/lovable-uploads/2ad54e9a-a63d-4459-8ce4-040fd6ff385d.png" 
+                alt="Grow CV Logo" 
+                className="h-10 w-10"
+              />
               <h1 className="text-2xl font-bold text-gray-800">Grow CV</h1>
             </div>
             <div className="flex space-x-4">
