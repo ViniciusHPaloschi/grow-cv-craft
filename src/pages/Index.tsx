@@ -9,7 +9,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
@@ -18,7 +18,7 @@ const Index = () => {
                 alt="Grow CV Logo" 
                 className="h-10 w-10"
               />
-              <h1 className="text-2xl font-bold text-gray-800">Grow CV</h1>
+              <h1 className="text-2xl font-bold" style={{ color: '#1F2937' }}>Grow CV</h1>
             </div>
             <div className="flex space-x-4">
               <Link 
@@ -41,11 +41,11 @@ const Index = () => {
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+          <h2 className="text-5xl md:text-6xl font-bold mb-6" style={{ color: '#1F2937' }}>
             Crie seu currículo profissional
             <span className="text-blue-500"> em minutos</span>
           </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl mb-8 max-w-3xl mx-auto" style={{ color: '#1F2937' }}>
             Com o Grow CV, você pode criar currículos profissionais de forma rápida e fácil. 
             Escolha entre diferentes modelos e personalize com seus dados.
           </p>
@@ -59,7 +59,19 @@ const Index = () => {
             </button>
             <button 
               onClick={redirectToModelos}
-              className="px-8 py-4 border-2 border-blue-500 text-blue-500 text-lg font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+              className="px-8 py-4 border-2 text-lg font-semibold rounded-lg transition-colors"
+              style={{ 
+                borderColor: '#1F2937',
+                color: '#1F2937'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#1F2937';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#1F2937';
+              }}
             >
               Ver Modelos
             </button>
@@ -68,40 +80,61 @@ const Index = () => {
 
         {/* Features */}
         <div className="mt-20 grid md:grid-cols-3 gap-8">
-          <div className="text-center p-6">
+          <div className="text-center p-6 bg-white rounded-xl shadow-md border" style={{ borderColor: '#1F2937' }}>
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Rápido e Fácil</h3>
+            <h3 className="text-xl font-semibold mb-2" style={{ color: '#1F2937' }}>Rápido e Fácil</h3>
             <p className="text-gray-600">Crie seu currículo em poucos minutos com nosso formulário intuitivo.</p>
           </div>
           
-          <div className="text-center p-6">
+          <div className="text-center p-6 bg-white rounded-xl shadow-md border" style={{ borderColor: '#1F2937' }}>
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Profissional</h3>
+            <h3 className="text-xl font-semibold mb-2" style={{ color: '#1F2937' }}>Profissional</h3>
             <p className="text-gray-600">Modelos criados por especialistas para impressionar recrutadores.</p>
           </div>
           
-          <div className="text-center p-6">
+          <div className="text-center p-6 bg-white rounded-xl shadow-md border" style={{ borderColor: '#1F2937' }}>
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Download PDF</h3>
+            <h3 className="text-xl font-semibold mb-2" style={{ color: '#1F2937' }}>Download PDF</h3>
             <p className="text-gray-600">Baixe seu currículo em PDF de alta qualidade para enviar.</p>
           </div>
         </div>
 
+        {/* Statistics Section */}
+        <div className="mt-20 py-16 px-8 rounded-2xl" style={{ backgroundColor: '#1F2937' }}>
+          <div className="text-center text-white">
+            <h3 className="text-3xl font-bold mb-8">Números que impressionam</h3>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div>
+                <div className="text-4xl font-bold text-blue-400 mb-2">10,000+</div>
+                <div className="text-lg">Currículos criados</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold text-green-400 mb-2">95%</div>
+                <div className="text-lg">Taxa de aprovação</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold text-yellow-400 mb-2">5 min</div>
+                <div className="text-lg">Tempo médio de criação</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* CTA Section */}
-        <div className="mt-20 bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
-          <h3 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="mt-20 bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center border-2" style={{ borderColor: '#1F2937' }}>
+          <h3 className="text-3xl font-bold mb-4" style={{ color: '#1F2937' }}>
             Pronto para criar seu currículo?
           </h3>
           <p className="text-lg text-gray-600 mb-8">
@@ -109,7 +142,14 @@ const Index = () => {
           </p>
           <button 
             onClick={redirectToFormulario}
-            className="inline-block px-8 py-4 bg-green-500 text-white text-lg font-semibold rounded-lg hover:bg-green-600 transition-colors shadow-lg"
+            className="inline-block px-8 py-4 text-white text-lg font-semibold rounded-lg transition-colors shadow-lg"
+            style={{ backgroundColor: '#1F2937' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#374151';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#1F2937';
+            }}
           >
             Começar Gratuitamente
           </button>
@@ -117,9 +157,17 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 mt-20">
+      <footer className="py-8 mt-20" style={{ backgroundColor: '#1F2937' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p>&copy; 2024 Grow CV. Todos os direitos reservados.</p>
+          <div className="flex justify-center items-center space-x-3 mb-4">
+            <img 
+              src="/lovable-uploads/2ad54e9a-a63d-4459-8ce4-040fd6ff385d.png" 
+              alt="Grow CV Logo" 
+              className="h-8 w-8"
+            />
+            <h4 className="text-xl font-bold text-white">Grow CV</h4>
+          </div>
+          <p className="text-gray-300">&copy; 2024 Grow CV. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
