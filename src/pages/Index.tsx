@@ -61,17 +61,17 @@ const Index = () => {
               onClick={redirectToModelos}
               className="px-8 py-4 border-2 text-lg font-semibold rounded-lg transition-colors"
               style={{ 
-                borderColor: '#264653', 
-                color: '#264653',
+                borderColor: '#2A9D8F', 
+                color: '#2A9D8F',
                 backgroundColor: 'transparent'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#264653';
+                e.currentTarget.style.backgroundColor = '#2A9D8F';
                 e.currentTarget.style.color = 'white';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#264653';
+                e.currentTarget.style.color = '#2A9D8F';
               }}
             >
               Ver Modelos
@@ -92,8 +92,8 @@ const Index = () => {
           </div>
           
           <div className="text-center p-6">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#264653' + '20' }}>
-              <svg className="w-8 h-8" fill="none" stroke="#264653" viewBox="0 0 24 24">
+            <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#2A9D8F' + '20' }}>
+              <svg className="w-8 h-8" fill="none" stroke="#2A9D8F" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -123,12 +123,12 @@ const Index = () => {
           <button 
             onClick={redirectToFormulario}
             className="inline-block px-8 py-4 text-white text-lg font-semibold rounded-lg transition-colors shadow-lg"
-            style={{ backgroundColor: '#264653' }}
+            style={{ backgroundColor: '#2A9D8F' }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#1e3a3f';
+              e.currentTarget.style.backgroundColor = '#238276';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#264653';
+              e.currentTarget.style.backgroundColor = '#2A9D8F';
             }}
           >
             Começar Gratuitamente
