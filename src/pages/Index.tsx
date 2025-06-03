@@ -59,7 +59,7 @@ const Index = () => {
             </button>
             <button 
               onClick={redirectToModelos}
-              className="px-8 py-4 border-2 border-blue-500 text-blue-500 text-lg font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+              className="px-8 py-4 border-2 border-purple-500 text-purple-500 text-lg font-semibold rounded-lg hover:bg-purple-50 transition-colors"
             >
               Ver Modelos
             </button>
@@ -79,8 +79,8 @@ const Index = () => {
           </div>
           
           <div className="text-center p-6">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -109,7 +109,7 @@ const Index = () => {
           </p>
           <button 
             onClick={redirectToFormulario}
-            className="inline-block px-8 py-4 bg-green-500 text-white text-lg font-semibold rounded-lg hover:bg-green-600 transition-colors shadow-lg"
+            className="inline-block px-8 py-4 bg-purple-500 text-white text-lg font-semibold rounded-lg hover:bg-purple-600 transition-colors shadow-lg"
           >
             Começar Gratuitamente
           </button>
