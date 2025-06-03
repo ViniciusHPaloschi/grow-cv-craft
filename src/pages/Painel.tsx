@@ -183,7 +183,14 @@ const Painel = () => {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <Link to="/" className="text-2xl font-bold text-gray-800">Grow CV</Link>
+            <Link to="/" className="flex items-center space-x-3">
+              <img 
+                src="/lovable-uploads/5fe141ed-a11c-4e31-85cc-a650afdddec2.png" 
+                alt="Grow CV Logo" 
+                className="h-10 w-10"
+              />
+              <span className="text-2xl font-bold text-gray-800">Grow CV</span>
+            </Link>
             <div className="flex items-center space-x-4">
               <span className="text-gray-600">Olá, {userProfile?.name || 'Usuário'}</span>
               <button

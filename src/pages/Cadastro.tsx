@@ -102,7 +102,14 @@ const Cadastro = () => {
       <div className="max-w-md w-full">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link to="/" className="text-2xl font-bold text-gray-800">Grow CV</Link>
+          <Link to="/" className="flex items-center justify-center space-x-3 mb-4">
+            <img 
+              src="/lovable-uploads/5fe141ed-a11c-4e31-85cc-a650afdddec2.png" 
+              alt="Grow CV Logo" 
+              className="h-10 w-10"
+            />
+            <span className="text-2xl font-bold text-gray-800">Grow CV</span>
+          </Link>
           <h2 className="mt-4 text-3xl font-bold text-gray-900">Criar conta</h2>
           <p className="mt-2 text-gray-600">Faça seu cadastro para começar</p>
         </div>
