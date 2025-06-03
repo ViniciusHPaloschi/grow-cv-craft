@@ -95,6 +95,7 @@ const Formulario = () => {
   };
 
   const handlePhotoChange = (photoUrl: string | undefined) => {
+    console.log('Atualizando foto no estado do formulário:', photoUrl);
     setFormData(prev => ({
       ...prev,
       fotoUrl: photoUrl
@@ -206,8 +207,26 @@ const Formulario = () => {
     }
 
     try {
+      // Verificar se existe uma foto mais recente no localStorage e sincronizar
+      const existingData = localStorage.getItem('growcv_form_data');
+      let finalFormData = { ...formData };
+      
+      if (existingData) {
+        try {
+          const savedData = JSON.parse(existingData);
+          if (savedData.fotoUrl && !finalFormData.fotoUrl) {
+            console.log('Sincronizando foto do localStorage:', savedData.fotoUrl);
+            finalFormData.fotoUrl = savedData.fotoUrl;
+          }
+        } catch (error) {
+          console.error('Erro ao sincronizar dados do localStorage:', error);
+        }
+      }
+      
+      console.log('Salvando dados finais:', finalFormData);
+      
       // Salvar dados no localStorage para próxima página
-      localStorage.setItem('growcv_form_data', JSON.stringify(formData));
+      localStorage.setItem('growcv_form_data', JSON.stringify(finalFormData));
       
       if (isEditing && editingId) {
         // Se está editando, ir direto para modelos
