@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -5,8 +6,6 @@ import { FormData } from '@/types/curriculum';
 import { generatePDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 
 const Visualizacao = () => {
   const navigate = useNavigate();
@@ -483,20 +482,21 @@ const Visualizacao = () => {
         {/* Theme Selector */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8 max-w-4xl mx-auto">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Escolha a cor do seu currículo:</h3>
-          <RadioGroup value={selectedTheme} onValueChange={setSelectedTheme} className="flex flex-wrap gap-4">
+          <div className="flex gap-3">
             {Object.entries(themes).map(([key, theme]) => (
-              <div key={key} className="flex items-center space-x-2">
-                <RadioGroupItem value={key} id={key} />
-                <Label htmlFor={key} className="flex items-center gap-2 cursor-pointer">
-                  <div 
-                    className="w-6 h-6 rounded-full border-2 border-gray-300"
-                    style={{ backgroundColor: theme.primary }}
-                  ></div>
-                  <span className="capitalize">{key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}</span>
-                </Label>
-              </div>
+              <button
+                key={key}
+                onClick={() => setSelectedTheme(key)}
+                className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
+                  selectedTheme === key 
+                    ? 'border-gray-800 shadow-lg scale-110' 
+                    : 'border-gray-300 hover:border-gray-500'
+                }`}
+                style={{ backgroundColor: theme.primary }}
+                title={key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}
+              />
             ))}
-          </RadioGroup>
+          </div>
         </div>
 
         {/* Actions */}
