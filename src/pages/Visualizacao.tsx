@@ -102,14 +102,13 @@ const Visualizacao = () => {
   const renderClassicoModel = () => (
     <div className="bg-white p-8 max-w-4xl mx-auto shadow-lg">
       {/* Header */}
-      <div className="text-center pb-6 mb-6" style={{ borderBottom: `2px solid ${currentTheme.primary}` }}>
+      <div className="text-center pb-6 mb-6 border-b-2 border-gray-800">
         {formData.fotoUrl && (
           <div className="flex justify-center mb-4">
             <img
               src={formData.fotoUrl}
               alt="Foto de perfil"
-              className="w-32 h-32 rounded-full object-cover border-4"
-              style={{ borderColor: currentTheme.primary }}
+              className="w-32 h-32 rounded-full object-cover border-4 border-gray-800"
               onError={(e) => {
                 console.error('Erro ao carregar imagem:', formData.fotoUrl);
                 e.currentTarget.style.display = 'none';
@@ -130,7 +129,7 @@ const Visualizacao = () => {
       {/* Objetivo */}
       {formData.objetivoProfissional && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
             OBJETIVO PROFISSIONAL
           </h2>
           <p className="text-gray-700 leading-relaxed">{formData.objetivoProfissional}</p>
@@ -140,7 +139,7 @@ const Visualizacao = () => {
       {/* Formação */}
       {formData.formacoes.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
             FORMAÇÃO ACADÊMICA
           </h2>
           {formData.formacoes.map((formacao, index) => (
@@ -162,7 +161,7 @@ const Visualizacao = () => {
       {/* Experiência */}
       {formData.experiencias.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
             EXPERIÊNCIA PROFISSIONAL
           </h2>
           {formData.experiencias.map((exp, index) => (
@@ -185,7 +184,7 @@ const Visualizacao = () => {
       {/* Cursos */}
       {formData.cursos.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
             CURSOS COMPLEMENTARES
           </h2>
           {formData.cursos.map((curso, index) => (
@@ -205,7 +204,7 @@ const Visualizacao = () => {
       {/* Habilidades */}
       {formData.habilidades && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
             HABILIDADES
           </h2>
           <p className="text-gray-700">{formData.habilidades}</p>
