@@ -507,24 +507,26 @@ const Visualizacao = () => {
           </div>
         </div>
 
-        {/* Theme Selector */}
-        <div className="flex justify-center mb-8">
-          <div className="flex gap-3">
-            {Object.entries(themes).map(([key, theme]) => (
-              <button
-                key={key}
-                onClick={() => setSelectedTheme(key)}
-                className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
-                  selectedTheme === key 
-                    ? 'border-gray-800 shadow-lg scale-110' 
-                    : 'border-gray-300 hover:border-gray-500'
-                }`}
-                style={{ backgroundColor: theme.primary }}
-                title={key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}
-              />
-            ))}
+        {/* Theme Selector - Only show for non-classic models */}
+        {selectedModel !== 'classico' && (
+          <div className="flex justify-center mb-8">
+            <div className="flex gap-3">
+              {Object.entries(themes).map(([key, theme]) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedTheme(key)}
+                  className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
+                    selectedTheme === key 
+                      ? 'border-gray-800 shadow-lg scale-110' 
+                      : 'border-gray-300 hover:border-gray-500'
+                  }`}
+                  style={{ backgroundColor: theme.primary }}
+                  title={key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Navigation */}
         <div className="text-center space-x-4">
