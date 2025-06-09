@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
@@ -389,7 +388,7 @@ const Visualizacao = () => {
               <div key={index} className="mb-6 last:mb-0">
                 <div className="border-l-4 pl-6" style={{ borderColor: currentTheme.primary }}>
                   <h3 className="font-bold text-lg text-gray-800">{exp.cargo}</h3>
-                  <p className="font-medium text-lg" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
+                  <p className="font-medium" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
                   <p className="text-gray-500 mb-2">{exp.anoInicio} - {exp.anoFim}</p>
                   {exp.descricao && <p className="text-gray-700">{exp.descricao}</p>}
                 </div>
@@ -479,26 +478,6 @@ const Visualizacao = () => {
           <p className="mt-2 text-gray-600">Modelo: <span className="capitalize font-medium">{selectedModel}</span></p>
         </div>
 
-        {/* Theme Selector */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8 max-w-4xl mx-auto">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Escolha a cor do seu currículo:</h3>
-          <div className="flex gap-3">
-            {Object.entries(themes).map(([key, theme]) => (
-              <button
-                key={key}
-                onClick={() => setSelectedTheme(key)}
-                className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
-                  selectedTheme === key 
-                    ? 'border-gray-800 shadow-lg scale-110' 
-                    : 'border-gray-300 hover:border-gray-500'
-                }`}
-                style={{ backgroundColor: theme.primary }}
-                title={key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}
-              />
-            ))}
-          </div>
-        </div>
-
         {/* Actions */}
         <div className="flex justify-center gap-4 mb-8">
           <button
@@ -525,6 +504,25 @@ const Visualizacao = () => {
         <div className="bg-white rounded-lg shadow-xl p-8 mb-8">
           <div id="curriculum-content">
             {renderCurriculum()}
+          </div>
+        </div>
+
+        {/* Theme Selector */}
+        <div className="flex justify-center mb-8">
+          <div className="flex gap-3">
+            {Object.entries(themes).map(([key, theme]) => (
+              <button
+                key={key}
+                onClick={() => setSelectedTheme(key)}
+                className={`w-8 h-8 rounded-full border-2 transition-all hover:scale-110 ${
+                  selectedTheme === key 
+                    ? 'border-gray-800 shadow-lg scale-110' 
+                    : 'border-gray-300 hover:border-gray-500'
+                }`}
+                style={{ backgroundColor: theme.primary }}
+                title={key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}
+              />
+            ))}
           </div>
         </div>
 
