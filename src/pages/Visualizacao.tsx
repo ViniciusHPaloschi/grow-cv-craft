@@ -4,13 +4,26 @@ import { useAuth } from '@/hooks/useAuth';
 import { FormData } from '@/types/curriculum';
 import { generatePDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 const Visualizacao = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [formData, setFormData] = useState<FormData | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>('');
+  const [selectedTheme, setSelectedTheme] = useState<string>('blue');
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const themes = {
+    blue: { primary: '#3B82F6', light: '#EFF6FF', dark: '#1E40AF' },
+    green: { primary: '#10B981', light: '#ECFDF5', dark: '#047857' },
+    purple: { primary: '#8B5CF6', light: '#F3E8FF', dark: '#6D28D9' },
+    red: { primary: '#EF4444', light: '#FEF2F2', dark: '#DC2626' },
+    orange: { primary: '#F97316', light: '#FFF7ED', dark: '#EA580C' },
+    teal: { primary: '#14B8A6', light: '#F0FDFA', dark: '#0F766E' }
+  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -86,24 +99,19 @@ const Visualizacao = () => {
     }
   };
 
-  if (loading || !formData) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div>Carregando...</div>
-      </div>
-    );
-  }
+  const currentTheme = themes[selectedTheme as keyof typeof themes];
 
   const renderClassicoModel = () => (
     <div className="bg-white p-8 max-w-4xl mx-auto shadow-lg">
       {/* Header */}
-      <div className="text-center border-b-2 border-gray-300 pb-6 mb-6">
+      <div className="text-center pb-6 mb-6" style={{ borderBottom: `2px solid ${currentTheme.primary}` }}>
         {formData.fotoUrl && (
           <div className="flex justify-center mb-4">
             <img
               src={formData.fotoUrl}
               alt="Foto de perfil"
-              className="w-32 h-32 rounded-full object-cover border-4 border-gray-300"
+              className="w-32 h-32 rounded-full object-cover border-4"
+              style={{ borderColor: currentTheme.primary }}
               onError={(e) => {
                 console.error('Erro ao carregar imagem:', formData.fotoUrl);
                 e.currentTarget.style.display = 'none';
@@ -124,7 +132,7 @@ const Visualizacao = () => {
       {/* Objetivo */}
       {formData.objetivoProfissional && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 border-b border-gray-300 pb-1">
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
             OBJETIVO PROFISSIONAL
           </h2>
           <p className="text-gray-700 leading-relaxed">{formData.objetivoProfissional}</p>
@@ -134,7 +142,7 @@ const Visualizacao = () => {
       {/* Formação */}
       {formData.formacoes.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 border-b border-gray-300 pb-1">
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
             FORMAÇÃO ACADÊMICA
           </h2>
           {formData.formacoes.map((formacao, index) => (
@@ -156,7 +164,7 @@ const Visualizacao = () => {
       {/* Experiência */}
       {formData.experiencias.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 border-b border-gray-300 pb-1">
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
             EXPERIÊNCIA PROFISSIONAL
           </h2>
           {formData.experiencias.map((exp, index) => (
@@ -179,7 +187,7 @@ const Visualizacao = () => {
       {/* Cursos */}
       {formData.cursos.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 border-b border-gray-300 pb-1">
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
             CURSOS COMPLEMENTARES
           </h2>
           {formData.cursos.map((curso, index) => (
@@ -199,7 +207,7 @@ const Visualizacao = () => {
       {/* Habilidades */}
       {formData.habilidades && (
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 border-b border-gray-300 pb-1">
+          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1" style={{ borderBottom: `1px solid ${currentTheme.primary}` }}>
             HABILIDADES
           </h2>
           <p className="text-gray-700">{formData.habilidades}</p>
@@ -211,7 +219,7 @@ const Visualizacao = () => {
   const renderModernoModel = () => (
     <div className="bg-white max-w-4xl mx-auto shadow-lg overflow-hidden">
       {/* Header com cor */}
-      <div className="bg-blue-500 text-white p-8">
+      <div className="text-white p-8" style={{ backgroundColor: currentTheme.primary }}>
         <div className="flex items-center gap-6">
           {formData.fotoUrl && (
             <img
@@ -229,7 +237,7 @@ const Visualizacao = () => {
           )}
           <div className="flex-1">
             <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
-            <div className="space-y-1 text-blue-100">
+            <div className="space-y-1 text-white text-opacity-90">
               <p>{formData.email} • {formData.telefone}</p>
               <p>{formData.endereco}</p>
             </div>
@@ -241,8 +249,8 @@ const Visualizacao = () => {
         {/* Objetivo */}
         {formData.objetivoProfissional && (
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-blue-500 mb-4 flex items-center">
-              <span className="w-1 h-6 bg-blue-500 mr-3"></span>
+            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+              <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
               OBJETIVO PROFISSIONAL
             </h2>
             <p className="text-gray-700 leading-relaxed pl-4">{formData.objetivoProfissional}</p>
@@ -255,15 +263,15 @@ const Visualizacao = () => {
             {/* Experiência */}
             {formData.experiencias.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-blue-500 mb-4 flex items-center">
-                  <span className="w-1 h-6 bg-blue-500 mr-3"></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
                   EXPERIÊNCIA
                 </h2>
                 {formData.experiencias.map((exp, index) => (
                   <div key={index} className="mb-6 pl-4">
                     <div className="mb-2">
                       <h3 className="font-bold text-gray-800">{exp.cargo}</h3>
-                      <p className="text-blue-600 font-medium">{exp.empresa}</p>
+                      <p className="font-medium" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
                       <p className="text-gray-500 text-sm">{exp.anoInicio} - {exp.anoFim}</p>
                     </div>
                     {exp.descricao && <p className="text-gray-700 text-sm">{exp.descricao}</p>}
@@ -278,14 +286,14 @@ const Visualizacao = () => {
             {/* Formação */}
             {formData.formacoes.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-blue-500 mb-4 flex items-center">
-                  <span className="w-1 h-6 bg-blue-500 mr-3"></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
                   FORMAÇÃO
                 </h2>
                 {formData.formacoes.map((formacao, index) => (
                   <div key={index} className="mb-4 pl-4">
                     <h3 className="font-bold text-gray-800">{formacao.curso}</h3>
-                    <p className="text-blue-600">{formacao.instituicao}</p>
+                    <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
                     <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
                   </div>
                 ))}
@@ -295,8 +303,8 @@ const Visualizacao = () => {
             {/* Cursos */}
             {formData.cursos.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-blue-500 mb-4 flex items-center">
-                  <span className="w-1 h-6 bg-blue-500 mr-3"></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
                   CURSOS
                 </h2>
                 <div className="pl-4">
@@ -313,8 +321,8 @@ const Visualizacao = () => {
             {/* Habilidades */}
             {formData.habilidades && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-blue-500 mb-4 flex items-center">
-                  <span className="w-1 h-6 bg-blue-500 mr-3"></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
                   HABILIDADES
                 </h2>
                 <div className="pl-4">
@@ -329,9 +337,9 @@ const Visualizacao = () => {
   );
 
   const renderCriativoModel = () => (
-    <div className="bg-gradient-to-br from-purple-50 to-pink-50 max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden">
+    <div className="max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden" style={{ background: `linear-gradient(135deg, ${currentTheme.light} 0%, ${currentTheme.light} 100%)` }}>
       {/* Header criativo */}
-      <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-8 relative">
+      <div className="text-white p-8 relative" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}>
         <div className="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -ml-12 -mb-12"></div>
         <div className="relative z-10 flex items-center gap-6">
@@ -351,7 +359,7 @@ const Visualizacao = () => {
           )}
           <div className="flex-1">
             <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
-            <div className="space-y-1 text-purple-100">
+            <div className="space-y-1 text-white text-opacity-90">
               <p>{formData.email} • {formData.telefone}</p>
               <p>{formData.endereco}</p>
             </div>
@@ -363,8 +371,8 @@ const Visualizacao = () => {
         {/* Objetivo */}
         {formData.objetivoProfissional && (
           <div className="mb-8 bg-white rounded-lg p-6 shadow-md">
-            <h2 className="text-2xl font-bold text-purple-600 mb-4 flex items-center">
-              <span className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mr-3"></span>
+            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
               SOBRE MIM
             </h2>
             <p className="text-gray-700 leading-relaxed italic">{formData.objetivoProfissional}</p>
@@ -374,15 +382,15 @@ const Visualizacao = () => {
         {/* Experiência */}
         {formData.experiencias.length > 0 && (
           <div className="mb-8 bg-white rounded-lg p-6 shadow-md">
-            <h2 className="text-2xl font-bold text-purple-600 mb-6 flex items-center">
-              <span className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mr-3"></span>
+            <h2 className="text-2xl font-bold mb-6 flex items-center" style={{ color: currentTheme.primary }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
               JORNADA PROFISSIONAL
             </h2>
             {formData.experiencias.map((exp, index) => (
               <div key={index} className="mb-6 last:mb-0">
-                <div className="border-l-4 border-gradient-to-b from-purple-500 to-pink-500 pl-6">
+                <div className="border-l-4 pl-6" style={{ borderColor: currentTheme.primary }}>
                   <h3 className="font-bold text-lg text-gray-800">{exp.cargo}</h3>
-                  <p className="text-purple-600 font-medium text-lg">{exp.empresa}</p>
+                  <p className="font-medium text-lg" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
                   <p className="text-gray-500 mb-2">{exp.anoInicio} - {exp.anoFim}</p>
                   {exp.descricao && <p className="text-gray-700">{exp.descricao}</p>}
                 </div>
@@ -395,14 +403,14 @@ const Visualizacao = () => {
           {/* Formação */}
           {formData.formacoes.length > 0 && (
             <div className="bg-white rounded-lg p-6 shadow-md">
-              <h2 className="text-xl font-bold text-purple-600 mb-4 flex items-center">
-                <span className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mr-3"></span>
+              <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
                 FORMAÇÃO
               </h2>
               {formData.formacoes.map((formacao, index) => (
                 <div key={index} className="mb-4 last:mb-0">
                   <h3 className="font-semibold text-gray-800">{formacao.curso}</h3>
-                  <p className="text-purple-600">{formacao.instituicao}</p>
+                  <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
                   <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
                 </div>
               ))}
@@ -413,8 +421,8 @@ const Visualizacao = () => {
           <div className="space-y-6">
             {formData.cursos.length > 0 && (
               <div className="bg-white rounded-lg p-6 shadow-md">
-                <h2 className="text-xl font-bold text-purple-600 mb-4 flex items-center">
-                  <span className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mr-3"></span>
+                <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
                   CURSOS
                 </h2>
                 {formData.cursos.map((curso, index) => (
@@ -428,8 +436,8 @@ const Visualizacao = () => {
 
             {formData.habilidades && (
               <div className="bg-white rounded-lg p-6 shadow-md">
-                <h2 className="text-xl font-bold text-purple-600 mb-4 flex items-center">
-                  <span className="w-3 h-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mr-3"></span>
+                <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
                   HABILIDADES
                 </h2>
                 <p className="text-gray-700">{formData.habilidades}</p>
@@ -454,6 +462,14 @@ const Visualizacao = () => {
     }
   };
 
+  if (loading || !formData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div>Carregando...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-6xl mx-auto px-4">
@@ -462,6 +478,25 @@ const Visualizacao = () => {
           <Link to="/" className="text-2xl font-bold text-gray-800">Grow CV</Link>
           <h1 className="mt-4 text-3xl font-bold text-gray-900">Seu Currículo Está Pronto!</h1>
           <p className="mt-2 text-gray-600">Modelo: <span className="capitalize font-medium">{selectedModel}</span></p>
+        </div>
+
+        {/* Theme Selector */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8 max-w-4xl mx-auto">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Escolha a cor do seu currículo:</h3>
+          <RadioGroup value={selectedTheme} onValueChange={setSelectedTheme} className="flex flex-wrap gap-4">
+            {Object.entries(themes).map(([key, theme]) => (
+              <div key={key} className="flex items-center space-x-2">
+                <RadioGroupItem value={key} id={key} />
+                <Label htmlFor={key} className="flex items-center gap-2 cursor-pointer">
+                  <div 
+                    className="w-6 h-6 rounded-full border-2 border-gray-300"
+                    style={{ backgroundColor: theme.primary }}
+                  ></div>
+                  <span className="capitalize">{key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}</span>
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
         </div>
 
         {/* Actions */}
