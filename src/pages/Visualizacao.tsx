@@ -100,15 +100,15 @@ const Visualizacao = () => {
   const currentTheme = themes[selectedTheme as keyof typeof themes];
 
   const renderClassicoModel = () => (
-    <div className="bg-white p-8 max-w-4xl mx-auto shadow-lg">
+    <div className="bg-white p-6 max-w-4xl mx-auto shadow-lg">
       {/* Header */}
-      <div className="text-center pb-6 mb-6 border-b-2 border-gray-800">
+      <div className="text-center pb-4 mb-4 border-b-2 border-gray-800">
         {formData.fotoUrl && (
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-3">
             <img
               src={formData.fotoUrl}
               alt="Foto de perfil"
-              className="w-32 h-32 rounded-full object-cover border-4 border-gray-800"
+              className="w-28 h-28 rounded-full object-cover border-4 border-gray-800"
               onError={(e) => {
                 console.error('Erro ao carregar imagem:', formData.fotoUrl);
                 e.currentTarget.style.display = 'none';
@@ -126,97 +126,106 @@ const Visualizacao = () => {
         </div>
       </div>
 
-      {/* Objetivo */}
-      {formData.objetivoProfissional && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
-            OBJETIVO PROFISSIONAL
-          </h2>
-          <p className="text-gray-700 leading-relaxed">{formData.objetivoProfissional}</p>
-        </div>
-      )}
+      {/* Content sections organized to minimize gaps */}
+      <div className="space-y-4">
+        {/* Objetivo */}
+        {formData.objetivoProfissional && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2 pb-1 border-b border-gray-800">
+              OBJETIVO PROFISSIONAL
+            </h2>
+            <p className="text-gray-700 leading-relaxed">{formData.objetivoProfissional}</p>
+          </div>
+        )}
 
-      {/* Formação */}
-      {formData.formacoes.length > 0 && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
-            FORMAÇÃO ACADÊMICA
-          </h2>
-          {formData.formacoes.map((formacao, index) => (
-            <div key={index} className="mb-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="font-semibold text-gray-800">{formacao.curso}</h3>
-                  <p className="text-gray-600">{formacao.instituicao}</p>
+        {/* Experiência */}
+        {formData.experiencias.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2 pb-1 border-b border-gray-800">
+              EXPERIÊNCIA PROFISSIONAL
+            </h2>
+            <div className="space-y-3">
+              {formData.experiencias.map((exp, index) => (
+                <div key={index}>
+                  <div className="flex justify-between items-start mb-1">
+                    <div>
+                      <h3 className="font-semibold text-gray-800">{exp.cargo}</h3>
+                      <p className="text-gray-600">{exp.empresa}</p>
+                    </div>
+                    <div className="text-gray-600 text-sm">
+                      {exp.anoInicio} - {exp.anoFim}
+                    </div>
+                  </div>
+                  {exp.descricao && <p className="text-gray-700 text-sm">{exp.descricao}</p>}
                 </div>
-                <div className="text-gray-600 text-sm">
-                  {formacao.anoInicio} - {formacao.anoFim}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* Experiência */}
-      {formData.experiencias.length > 0 && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
-            EXPERIÊNCIA PROFISSIONAL
-          </h2>
-          {formData.experiencias.map((exp, index) => (
-            <div key={index} className="mb-4">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="font-semibold text-gray-800">{exp.cargo}</h3>
-                  <p className="text-gray-600">{exp.empresa}</p>
+        {/* Formação */}
+        {formData.formacoes.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2 pb-1 border-b border-gray-800">
+              FORMAÇÃO ACADÊMICA
+            </h2>
+            <div className="space-y-2">
+              {formData.formacoes.map((formacao, index) => (
+                <div key={index}>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-gray-800">{formacao.curso}</h3>
+                      <p className="text-gray-600">{formacao.instituicao}</p>
+                    </div>
+                    <div className="text-gray-600 text-sm">
+                      {formacao.anoInicio} - {formacao.anoFim}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-gray-600 text-sm">
-                  {exp.anoInicio} - {exp.anoFim}
-                </div>
-              </div>
-              {exp.descricao && <p className="text-gray-700 text-sm">{exp.descricao}</p>}
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* Cursos */}
-      {formData.cursos.length > 0 && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
-            CURSOS COMPLEMENTARES
-          </h2>
-          {formData.cursos.map((curso, index) => (
-            <div key={index} className="mb-2">
-              <div className="flex justify-between items-center">
-                <div>
-                  <span className="font-semibold text-gray-800">{curso.nome}</span>
-                  <span className="text-gray-600"> - {curso.instituicao}</span>
+        {/* Cursos */}
+        {formData.cursos.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2 pb-1 border-b border-gray-800">
+              CURSOS COMPLEMENTARES
+            </h2>
+            <div className="space-y-1">
+              {formData.cursos.map((curso, index) => (
+                <div key={index}>
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <span className="font-semibold text-gray-800">{curso.nome}</span>
+                      <span className="text-gray-600"> - {curso.instituicao}</span>
+                    </div>
+                    <span className="text-gray-600 text-sm">{curso.ano}</span>
+                  </div>
                 </div>
-                <span className="text-gray-600 text-sm">{curso.ano}</span>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* Habilidades */}
-      {formData.habilidades && (
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-3 pb-1 border-b border-gray-800">
-            HABILIDADES
-          </h2>
-          <p className="text-gray-700">{formData.habilidades}</p>
-        </div>
-      )}
+        {/* Habilidades */}
+        {formData.habilidades && (
+          <div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2 pb-1 border-b border-gray-800">
+              HABILIDADES
+            </h2>
+            <p className="text-gray-700">{formData.habilidades}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 
   const renderModernoModel = () => (
     <div className="bg-white max-w-4xl mx-auto shadow-lg overflow-hidden">
       {/* Header com cor */}
-      <div className="text-white p-8" style={{ backgroundColor: currentTheme.primary }}>
+      <div className="text-white p-6" style={{ backgroundColor: currentTheme.primary }}>
         <div className="flex items-center gap-6">
           {formData.fotoUrl && (
             <img
@@ -242,11 +251,11 @@ const Visualizacao = () => {
         </div>
       </div>
 
-      <div className="p-8">
-        {/* Objetivo */}
+      <div className="p-6">
+        {/* Objetivo - full width */}
         {formData.objetivoProfissional && (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
               <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
               OBJETIVO PROFISSIONAL
             </h2>
@@ -254,18 +263,18 @@ const Visualizacao = () => {
           </div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Coluna Esquerda */}
-          <div>
-            {/* Experiência */}
-            {formData.experiencias.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
-                  EXPERIÊNCIA
-                </h2>
+        {/* Dynamic grid layout based on content */}
+        <div className="space-y-6">
+          {/* Experiência - always gets priority position */}
+          {formData.experiencias.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+                <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+                EXPERIÊNCIA
+              </h2>
+              <div className="grid gap-4 pl-4">
                 {formData.experiencias.map((exp, index) => (
-                  <div key={index} className="mb-6 pl-4">
+                  <div key={index}>
                     <div className="mb-2">
                       <h3 className="font-bold text-gray-800">{exp.cargo}</h3>
                       <p className="font-medium" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
@@ -275,38 +284,40 @@ const Visualizacao = () => {
                   </div>
                 ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
-          {/* Coluna Direita */}
-          <div>
+          {/* Other sections in compact grid */}
+          <div className="grid md:grid-cols-2 gap-6">
             {/* Formação */}
             {formData.formacoes.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+              <div>
+                <h2 className="text-xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-1 h-5 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
                   FORMAÇÃO
                 </h2>
-                {formData.formacoes.map((formacao, index) => (
-                  <div key={index} className="mb-4 pl-4">
-                    <h3 className="font-bold text-gray-800">{formacao.curso}</h3>
-                    <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
-                    <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
-                  </div>
-                ))}
+                <div className="space-y-3 pl-4">
+                  {formData.formacoes.map((formacao, index) => (
+                    <div key={index}>
+                      <h3 className="font-bold text-gray-800">{formacao.curso}</h3>
+                      <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
+                      <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
             {/* Cursos */}
             {formData.cursos.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+              <div>
+                <h2 className="text-xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
+                  <span className="w-1 h-5 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
                   CURSOS
                 </h2>
-                <div className="pl-4">
+                <div className="space-y-2 pl-4">
                   {formData.cursos.map((curso, index) => (
-                    <div key={index} className="mb-2">
+                    <div key={index}>
                       <p className="font-medium text-gray-800">{curso.nome}</p>
                       <p className="text-gray-600 text-sm">{curso.instituicao} - {curso.ano}</p>
                     </div>
@@ -314,20 +325,20 @@ const Visualizacao = () => {
                 </div>
               </div>
             )}
-
-            {/* Habilidades */}
-            {formData.habilidades && (
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
-                  HABILIDADES
-                </h2>
-                <div className="pl-4">
-                  <p className="text-gray-700">{formData.habilidades}</p>
-                </div>
-              </div>
-            )}
           </div>
+
+          {/* Habilidades - full width at bottom */}
+          {formData.habilidades && (
+            <div>
+              <h2 className="text-xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
+                <span className="w-1 h-5 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+                HABILIDADES
+              </h2>
+              <div className="pl-4">
+                <p className="text-gray-700">{formData.habilidades}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -336,7 +347,7 @@ const Visualizacao = () => {
   const renderCriativoModel = () => (
     <div className="max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden" style={{ background: `linear-gradient(135deg, ${currentTheme.light} 0%, ${currentTheme.light} 100%)` }}>
       {/* Header criativo */}
-      <div className="text-white p-8 relative" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}>
+      <div className="text-white p-6 relative" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}>
         <div className="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -ml-12 -mb-12"></div>
         <div className="relative z-10 flex items-center gap-6">
@@ -364,11 +375,11 @@ const Visualizacao = () => {
         </div>
       </div>
 
-      <div className="p-8">
+      <div className="p-6 space-y-5">
         {/* Objetivo */}
         {formData.objetivoProfissional && (
-          <div className="mb-8 bg-white rounded-lg p-6 shadow-md">
-            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
+          <div className="bg-white rounded-lg p-5 shadow-md">
+            <h2 className="text-2xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
               <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
               SOBRE MIM
             </h2>
@@ -378,70 +389,76 @@ const Visualizacao = () => {
 
         {/* Experiência */}
         {formData.experiencias.length > 0 && (
-          <div className="mb-8 bg-white rounded-lg p-6 shadow-md">
-            <h2 className="text-2xl font-bold mb-6 flex items-center" style={{ color: currentTheme.primary }}>
+          <div className="bg-white rounded-lg p-5 shadow-md">
+            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
               <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
               JORNADA PROFISSIONAL
             </h2>
-            {formData.experiencias.map((exp, index) => (
-              <div key={index} className="mb-6 last:mb-0">
-                <div className="border-l-4 pl-6" style={{ borderColor: currentTheme.primary }}>
-                  <h3 className="font-bold text-lg text-gray-800">{exp.cargo}</h3>
-                  <p className="font-medium" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
-                  <p className="text-gray-500 mb-2">{exp.anoInicio} - {exp.anoFim}</p>
-                  {exp.descricao && <p className="text-gray-700">{exp.descricao}</p>}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Formação */}
-          {formData.formacoes.length > 0 && (
-            <div className="bg-white rounded-lg p-6 shadow-md">
-              <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
-                FORMAÇÃO
-              </h2>
-              {formData.formacoes.map((formacao, index) => (
-                <div key={index} className="mb-4 last:mb-0">
-                  <h3 className="font-semibold text-gray-800">{formacao.curso}</h3>
-                  <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
-                  <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
+            <div className="space-y-4">
+              {formData.experiencias.map((exp, index) => (
+                <div key={index}>
+                  <div className="border-l-4 pl-4" style={{ borderColor: currentTheme.primary }}>
+                    <h3 className="font-bold text-lg text-gray-800">{exp.cargo}</h3>
+                    <p className="font-medium" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
+                    <p className="text-gray-500 mb-2">{exp.anoInicio} - {exp.anoFim}</p>
+                    {exp.descricao && <p className="text-gray-700">{exp.descricao}</p>}
+                  </div>
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Grid compacto para outras seções */}
+        <div className="grid md:grid-cols-2 gap-5">
+          {/* Formação */}
+          {formData.formacoes.length > 0 && (
+            <div className="bg-white rounded-lg p-5 shadow-md">
+              <h2 className="text-xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
+                <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+                FORMAÇÃO
+              </h2>
+              <div className="space-y-3">
+                {formData.formacoes.map((formacao, index) => (
+                  <div key={index}>
+                    <h3 className="font-semibold text-gray-800">{formacao.curso}</h3>
+                    <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
+                    <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
-          {/* Cursos e Habilidades */}
-          <div className="space-y-6">
-            {formData.cursos.length > 0 && (
-              <div className="bg-white rounded-lg p-6 shadow-md">
-                <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
-                  CURSOS
-                </h2>
+          {/* Cursos */}
+          {formData.cursos.length > 0 && (
+            <div className="bg-white rounded-lg p-5 shadow-md">
+              <h2 className="text-xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
+                <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+                CURSOS
+              </h2>
+              <div className="space-y-2">
                 {formData.cursos.map((curso, index) => (
-                  <div key={index} className="mb-3 last:mb-0">
+                  <div key={index}>
                     <p className="font-medium text-gray-800">{curso.nome}</p>
                     <p className="text-gray-600 text-sm">{curso.instituicao} • {curso.ano}</p>
                   </div>
                 ))}
               </div>
-            )}
-
-            {formData.habilidades && (
-              <div className="bg-white rounded-lg p-6 shadow-md">
-                <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
-                  HABILIDADES
-                </h2>
-                <p className="text-gray-700">{formData.habilidades}</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
+
+        {/* Habilidades - full width */}
+        {formData.habilidades && (
+          <div className="bg-white rounded-lg p-5 shadow-md">
+            <h2 className="text-xl font-bold mb-3 flex items-center" style={{ color: currentTheme.primary }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+              HABILIDADES
+            </h2>
+            <p className="text-gray-700">{formData.habilidades}</p>
+          </div>
+        )}
       </div>
     </div>
   );
