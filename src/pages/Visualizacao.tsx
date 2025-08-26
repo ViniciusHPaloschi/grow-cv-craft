@@ -11,16 +11,16 @@ const Visualizacao = () => {
   const { user, loading } = useAuth();
   const [formData, setFormData] = useState<FormData | null>(null);
   const [selectedModel, setSelectedModel] = useState<string>('');
-  const [selectedTheme, setSelectedTheme] = useState<string>('blue');
+  const [selectedTheme, setSelectedTheme] = useState<string>('sand');
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const themes = {
-    blue: { primary: '#3B82F6', light: '#EFF6FF', dark: '#1E40AF' },
-    green: { primary: '#10B981', light: '#ECFDF5', dark: '#047857' },
-    purple: { primary: '#8B5CF6', light: '#F3E8FF', dark: '#6D28D9' },
-    red: { primary: '#EF4444', light: '#FEF2F2', dark: '#DC2626' },
-    orange: { primary: '#F97316', light: '#FFF7ED', dark: '#EA580C' },
-    teal: { primary: '#14B8A6', light: '#F0FDFA', dark: '#0F766E' }
+    sand: { primary: '#EA580C', light: '#FFF7ED', dark: '#C2410C' },
+    mint: { primary: '#10B981', light: '#ECFDF5', dark: '#047857' },
+    lilac: { primary: '#8B5CF6', light: '#EDE9FE', dark: '#6D28D9' },
+    neutral: { primary: '#6B7280', light: '#E1E1E3', dark: '#4B5563' },
+    light: { primary: '#6B7280', light: '#F9FAFB', dark: '#374151' },
+    blue: { primary: '#3B82F6', light: '#BFDBFE', dark: '#1E40AF' }
   };
 
   useEffect(() => {
@@ -523,7 +523,7 @@ const Visualizacao = () => {
                       : 'border-gray-300 hover:border-gray-500'
                   }`}
                   style={{ backgroundColor: theme.primary }}
-                  title={key === 'blue' ? 'Azul' : key === 'green' ? 'Verde' : key === 'purple' ? 'Roxo' : key === 'red' ? 'Vermelho' : key === 'orange' ? 'Laranja' : 'Azul-petróleo'}
+                  title={key === 'sand' ? 'Areia Clara' : key === 'mint' ? 'Verde Menta' : key === 'lilac' ? 'Lilás' : key === 'neutral' ? 'Cinza Neutro' : key === 'light' ? 'Cinza Claro' : 'Azul Elegante'}
                 />
               ))}
             </div>
