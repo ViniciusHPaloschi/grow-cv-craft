@@ -9,55 +9,89 @@ export const generatePDF = async (elementId: string, fileName: string) => {
       throw new Error('Elemento não encontrado');
     }
 
-    // Configurar o elemento para melhor qualidade do PDF
+    // Configurar o elemento para melhor renderização
     const originalStyle = element.style.cssText;
     element.style.cssText = `
       ${originalStyle}
       background: white;
-      padding: 20px;
+      padding: 0;
+      margin: 0;
       box-shadow: none;
+      width: 794px !important;
+      min-height: auto;
     `;
 
-    // Gerar o canvas do elemento
+    // Forçar re-render do elemento
+    element.offsetHeight;
+
+    // Gerar o canvas com configurações otimizadas
     const canvas = await html2canvas(element, {
-      scale: 2, // Aumentar a qualidade
+      scale: 2,
       useCORS: true,
+      allowTaint: true,
       backgroundColor: '#ffffff',
       logging: false,
-      width: element.scrollWidth,
-      height: element.scrollHeight
+      width: 794, // Largura A4 em pixels (210mm * 3.78)
+      height: element.scrollHeight,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: 794,
+      windowHeight: element.scrollHeight
     });
 
     // Restaurar o estilo original
     element.style.cssText = originalStyle;
 
     // Criar o PDF
-    const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL('image/png', 1.0);
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4'
     });
 
-    // Calcular dimensões para caber na página A4
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pageWidth - 20; // Margem de 10mm de cada lado
+    // Dimensões da página A4
+    const pageWidth = 210; // mm
+    const pageHeight = 297; // mm
+    const margin = 5; // mm
+    const imgWidth = pageWidth - (margin * 2);
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let heightLeft = imgHeight;
-    let position = 10; // Margem superior
-
-    // Adicionar a primeira página
-    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight - 20; // Subtrair margens
-
-    // Adicionar páginas extras se necessário
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight + 10;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight - 20;
+    // Se a imagem cabe em uma página
+    if (imgHeight <= pageHeight - (margin * 2)) {
+      pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+    } else {
+      // Múltiplas páginas - dividir o conteúdo
+      const pageContentHeight = pageHeight - (margin * 2);
+      const totalPages = Math.ceil(imgHeight / pageContentHeight);
+      
+      for (let i = 0; i < totalPages; i++) {
+        if (i > 0) {
+          pdf.addPage();
+        }
+        
+        const sourceY = i * (canvas.height / totalPages);
+        const sourceHeight = canvas.height / totalPages;
+        
+        // Criar um canvas temporário para esta página
+        const pageCanvas = document.createElement('canvas');
+        pageCanvas.width = canvas.width;
+        pageCanvas.height = sourceHeight;
+        const pageCtx = pageCanvas.getContext('2d');
+        
+        if (pageCtx) {
+          pageCtx.drawImage(
+            canvas,
+            0, sourceY, canvas.width, sourceHeight,
+            0, 0, canvas.width, sourceHeight
+          );
+          
+          const pageImgData = pageCanvas.toDataURL('image/png', 1.0);
+          const pageImgHeight = (sourceHeight * imgWidth) / canvas.width;
+          
+          pdf.addImage(pageImgData, 'PNG', margin, margin, imgWidth, pageImgHeight);
+        }
+      }
     }
 
     // Fazer o download
