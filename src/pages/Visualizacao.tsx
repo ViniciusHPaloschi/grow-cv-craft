@@ -15,12 +15,12 @@ const Visualizacao = () => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const themes = {
-    sand: { primary: '#FFF7ED', light: '#FFFBEB', dark: '#F3E8D3', accent: '#EA580C' },
-    mint: { primary: '#ECFDF5', light: '#F0FDF4', dark: '#D1FAE5', accent: '#10B981' },
-    lilac: { primary: '#EDE9FE', light: '#F5F3FF', dark: '#DDD6FE', accent: '#8B5CF6' },
-    neutral: { primary: '#E1E1E3', light: '#F3F4F6', dark: '#D1D5DB', accent: '#6B7280' },
-    light: { primary: '#F9FAFB', light: '#FFFFFF', dark: '#F3F4F6', accent: '#6B7280' },
-    blue: { primary: '#BFDBFE', light: '#DBEAFE', dark: '#93C5FD', accent: '#3B82F6' }
+    sand: { primary: '#FFF7ED', light: '#FFFBEB', dark: '#F3E8D3', accent: '#92400E' },
+    mint: { primary: '#ECFDF5', light: '#F0FDF4', dark: '#D1FAE5', accent: '#065F46' },
+    lilac: { primary: '#EDE9FE', light: '#F5F3FF', dark: '#DDD6FE', accent: '#5B21B6' },
+    neutral: { primary: '#E1E1E3', light: '#F3F4F6', dark: '#D1D5DB', accent: '#374151' },
+    light: { primary: '#F9FAFB', light: '#FFFFFF', dark: '#F3F4F6', accent: '#111827' },
+    blue: { primary: '#BFDBFE', light: '#DBEAFE', dark: '#93C5FD', accent: '#1E3A8A' }
   };
 
   useEffect(() => {
