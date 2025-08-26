@@ -20,7 +20,8 @@ const Visualizacao = () => {
     lilac: { primary: '#EDE9FE', light: '#F5F3FF', dark: '#DDD6FE', accent: '#5B21B6' },
     neutral: { primary: '#E1E1E3', light: '#F3F4F6', dark: '#D1D5DB', accent: '#374151' },
     light: { primary: '#F9FAFB', light: '#FFFFFF', dark: '#F3F4F6', accent: '#111827' },
-    blue: { primary: '#BFDBFE', light: '#DBEAFE', dark: '#93C5FD', accent: '#1E3A8A' }
+    blue: { primary: '#BFDBFE', light: '#DBEAFE', dark: '#93C5FD', accent: '#1E3A8A' },
+    teal: { primary: '#5DA1B9', light: '#A7D8E4', dark: '#4A8BA0', accent: '#0B3C49' }
   };
 
   useEffect(() => {
@@ -523,7 +524,7 @@ const Visualizacao = () => {
                       : 'border-gray-300 hover:border-gray-500'
                   }`}
                   style={{ backgroundColor: theme.primary }}
-                  title={key === 'sand' ? 'Areia Clara' : key === 'mint' ? 'Verde Menta' : key === 'lilac' ? 'Lilás' : key === 'neutral' ? 'Cinza Neutro' : key === 'light' ? 'Cinza Claro' : 'Azul Elegante'}
+                  title={key === 'sand' ? 'Areia Clara' : key === 'mint' ? 'Verde Menta' : key === 'lilac' ? 'Lilás' : key === 'neutral' ? 'Cinza Neutro' : key === 'light' ? 'Cinza Claro' : key === 'blue' ? 'Azul Elegante' : 'Azul Petróleo'}
                 />
               ))}
             </div>
