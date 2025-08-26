@@ -15,12 +15,12 @@ const Visualizacao = () => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const themes = {
-    sand: { primary: '#EA580C', light: '#FFF7ED', dark: '#C2410C' },
-    mint: { primary: '#10B981', light: '#ECFDF5', dark: '#047857' },
-    lilac: { primary: '#8B5CF6', light: '#EDE9FE', dark: '#6D28D9' },
-    neutral: { primary: '#6B7280', light: '#E1E1E3', dark: '#4B5563' },
-    light: { primary: '#6B7280', light: '#F9FAFB', dark: '#374151' },
-    blue: { primary: '#3B82F6', light: '#BFDBFE', dark: '#1E40AF' }
+    sand: { primary: '#FFF7ED', light: '#FFFBEB', dark: '#F3E8D3', accent: '#EA580C' },
+    mint: { primary: '#ECFDF5', light: '#F0FDF4', dark: '#D1FAE5', accent: '#10B981' },
+    lilac: { primary: '#EDE9FE', light: '#F5F3FF', dark: '#DDD6FE', accent: '#8B5CF6' },
+    neutral: { primary: '#E1E1E3', light: '#F3F4F6', dark: '#D1D5DB', accent: '#6B7280' },
+    light: { primary: '#F9FAFB', light: '#FFFFFF', dark: '#F3F4F6', accent: '#6B7280' },
+    blue: { primary: '#BFDBFE', light: '#DBEAFE', dark: '#93C5FD', accent: '#3B82F6' }
   };
 
   useEffect(() => {
@@ -216,7 +216,7 @@ const Visualizacao = () => {
   const renderModernoModel = () => (
     <div className="bg-white max-w-4xl mx-auto shadow-lg overflow-hidden">
       {/* Header com cor */}
-      <div className="text-white p-8" style={{ backgroundColor: currentTheme.primary }}>
+      <div className="text-gray-800 p-8" style={{ backgroundColor: currentTheme.primary }}>
         <div className="flex items-center gap-6">
           {formData.fotoUrl && (
             <img
@@ -234,7 +234,7 @@ const Visualizacao = () => {
           )}
           <div className="flex-1">
             <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
-            <div className="space-y-1 text-white text-opacity-90">
+            <div className="space-y-1 text-gray-800">
               <p>{formData.email} • {formData.telefone}</p>
               <p>{formData.endereco}</p>
             </div>
@@ -246,8 +246,8 @@ const Visualizacao = () => {
         {/* Objetivo */}
         {formData.objetivoProfissional && (
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-              <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+              <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.accent }}></span>
               OBJETIVO PROFISSIONAL
             </h2>
             <p className="text-gray-700 leading-relaxed pl-4">{formData.objetivoProfissional}</p>
@@ -260,15 +260,15 @@ const Visualizacao = () => {
             {/* Experiência */}
             {formData.experiencias.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.accent }}></span>
                   EXPERIÊNCIA
                 </h2>
                 {formData.experiencias.map((exp, index) => (
                   <div key={index} className="mb-6 pl-4">
                     <div className="mb-2">
                       <h3 className="font-bold text-gray-800">{exp.cargo}</h3>
-                      <p className="font-medium" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
+                       <p className="font-medium" style={{ color: currentTheme.accent }}>{exp.empresa}</p>
                       <p className="text-gray-500 text-sm">{exp.anoInicio} - {exp.anoFim}</p>
                     </div>
                     {exp.descricao && <p className="text-gray-700 text-sm">{exp.descricao}</p>}
@@ -283,14 +283,14 @@ const Visualizacao = () => {
             {/* Formação */}
             {formData.formacoes.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.accent }}></span>
                   FORMAÇÃO
                 </h2>
                 {formData.formacoes.map((formacao, index) => (
                   <div key={index} className="mb-4 pl-4">
                     <h3 className="font-bold text-gray-800">{formacao.curso}</h3>
-                    <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
+                     <p style={{ color: currentTheme.accent }}>{formacao.instituicao}</p>
                     <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
                   </div>
                 ))}
@@ -300,8 +300,8 @@ const Visualizacao = () => {
             {/* Cursos */}
             {formData.cursos.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.accent }}></span>
                   CURSOS
                 </h2>
                 <div className="pl-4">
@@ -318,8 +318,8 @@ const Visualizacao = () => {
             {/* Habilidades */}
             {formData.habilidades && (
               <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.primary }}></span>
+                <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+                  <span className="w-1 h-6 mr-3" style={{ backgroundColor: currentTheme.accent }}></span>
                   HABILIDADES
                 </h2>
                 <div className="pl-4">
@@ -336,7 +336,7 @@ const Visualizacao = () => {
   const renderCriativoModel = () => (
     <div className="max-w-4xl mx-auto shadow-2xl rounded-lg overflow-hidden" style={{ background: `linear-gradient(135deg, ${currentTheme.light} 0%, ${currentTheme.light} 100%)` }}>
       {/* Header criativo */}
-      <div className="text-white p-8 relative break-inside-avoid" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}>
+      <div className="text-gray-800 p-8 relative break-inside-avoid" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}>
         <div className="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -mr-16 -mt-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -ml-12 -mb-12"></div>
         <div className="relative z-10 flex items-center gap-6">
@@ -356,7 +356,7 @@ const Visualizacao = () => {
           )}
           <div className="flex-1">
             <h1 className="text-4xl font-bold mb-2">{formData.nomeCompleto}</h1>
-            <div className="space-y-1 text-white text-opacity-90">
+            <div className="space-y-1 text-gray-800">
               <p>{formData.email} • {formData.telefone}</p>
               <p>{formData.endereco}</p>
             </div>
@@ -368,8 +368,8 @@ const Visualizacao = () => {
         {/* Objetivo */}
         {formData.objetivoProfissional && (
           <div className="bg-white rounded-lg p-6 shadow-md break-inside-avoid">
-            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+            <h2 className="text-2xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.accent} 0%, ${currentTheme.dark} 100%)` }}></span>
               SOBRE MIM
             </h2>
             <p className="text-gray-700 leading-relaxed italic">{formData.objetivoProfissional}</p>
@@ -379,16 +379,16 @@ const Visualizacao = () => {
         {/* Experiência */}
         {formData.experiencias.length > 0 && (
           <div className="bg-white rounded-lg p-6 shadow-md break-inside-avoid">
-            <h2 className="text-2xl font-bold mb-6 flex items-center" style={{ color: currentTheme.primary }}>
-              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+            <h2 className="text-2xl font-bold mb-6 flex items-center" style={{ color: currentTheme.accent }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.accent} 0%, ${currentTheme.dark} 100%)` }}></span>
               JORNADA PROFISSIONAL
             </h2>
             <div className="space-y-6">
               {formData.experiencias.map((exp, index) => (
                 <div key={index} className="break-inside-avoid">
-                  <div className="border-l-4 pl-6" style={{ borderColor: currentTheme.primary }}>
+                  <div className="border-l-4 pl-6" style={{ borderColor: currentTheme.accent }}>
                     <h3 className="font-bold text-lg text-gray-800">{exp.cargo}</h3>
-                    <p className="font-medium" style={{ color: currentTheme.primary }}>{exp.empresa}</p>
+                    <p className="font-medium" style={{ color: currentTheme.accent }}>{exp.empresa}</p>
                     <p className="text-gray-500 mb-2">{exp.anoInicio} - {exp.anoFim}</p>
                     {exp.descricao && <p className="text-gray-700">{exp.descricao}</p>}
                   </div>
@@ -401,15 +401,15 @@ const Visualizacao = () => {
         {/* Formação */}
         {formData.formacoes.length > 0 && (
           <div className="bg-white rounded-lg p-6 shadow-md break-inside-avoid">
-            <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+            <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.accent} 0%, ${currentTheme.dark} 100%)` }}></span>
               FORMAÇÃO
             </h2>
             <div className="space-y-4">
               {formData.formacoes.map((formacao, index) => (
                 <div key={index} className="break-inside-avoid">
                   <h3 className="font-semibold text-gray-800">{formacao.curso}</h3>
-                  <p style={{ color: currentTheme.primary }}>{formacao.instituicao}</p>
+                  <p style={{ color: currentTheme.accent }}>{formacao.instituicao}</p>
                   <p className="text-gray-500 text-sm">{formacao.anoInicio} - {formacao.anoFim}</p>
                 </div>
               ))}
@@ -420,8 +420,8 @@ const Visualizacao = () => {
         {/* Cursos */}
         {formData.cursos.length > 0 && (
           <div className="bg-white rounded-lg p-6 shadow-md break-inside-avoid">
-            <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+            <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.accent} 0%, ${currentTheme.dark} 100%)` }}></span>
               CURSOS
             </h2>
             <div className="space-y-3">
@@ -438,8 +438,8 @@ const Visualizacao = () => {
         {/* Habilidades */}
         {formData.habilidades && (
           <div className="bg-white rounded-lg p-6 shadow-md break-inside-avoid">
-            <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.primary }}>
-              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.primary} 0%, ${currentTheme.dark} 100%)` }}></span>
+            <h2 className="text-xl font-bold mb-4 flex items-center" style={{ color: currentTheme.accent }}>
+              <span className="w-3 h-3 rounded-full mr-3" style={{ background: `linear-gradient(135deg, ${currentTheme.accent} 0%, ${currentTheme.dark} 100%)` }}></span>
               HABILIDADES
             </h2>
             <p className="text-gray-700">{formData.habilidades}</p>
