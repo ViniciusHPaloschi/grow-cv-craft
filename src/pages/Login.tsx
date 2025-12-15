@@ -1,8 +1,11 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ArrowLeft, Mail, Lock, Loader2 } from 'lucide-react';
 
 interface FormData {
   email: string;
@@ -60,8 +63,6 @@ const Login = () => {
         password: formData.senha
       });
 
-      console.log('Login response:', { data, error });
-
       if (error) {
         console.error('Login error:', error);
         setErrors({ general: 'E-mail ou senha incorretos' });
@@ -69,7 +70,6 @@ const Login = () => {
       }
 
       if (data.user) {
-        console.log('Login successful:', data.user);
         toast.success('Login realizado com sucesso!');
         navigate('/painel');
       }
@@ -82,89 +82,119 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <Link to="/" className="flex items-center justify-center space-x-3 mb-4">
-            <img 
-              src="/lovable-uploads/5fe141ed-a11c-4e31-85cc-a650afdddec2.png" 
-              alt="Grow CV Logo" 
-              className="h-10 w-10"
-            />
-            <span className="text-2xl font-bold text-gray-800">Grow CV</span>
-          </Link>
-          <h2 className="mt-4 text-3xl font-bold text-gray-900">Entrar na conta</h2>
-          <p className="mt-2 text-gray-600">Acesse sua conta para continuar</p>
-        </div>
+    <div className="min-h-screen bg-background flex">
+      {/* Animated background */}
+      <div className="fixed inset-0 bg-gradient-hero pointer-events-none" />
+      <div className="fixed top-1/3 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[128px] animate-pulse-slow pointer-events-none" />
+      <div className="fixed bottom-1/3 right-1/4 w-80 h-80 bg-secondary/10 rounded-full blur-[128px] animate-pulse-slow pointer-events-none" style={{ animationDelay: '2s' }} />
 
-        {/* Form */}
-        <div className="bg-white rounded-lg shadow-xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {errors.general && (
-              <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                {errors.general}
+      {/* Content */}
+      <div className="relative flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="text-center mb-10 opacity-0 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <Link to="/" className="inline-flex items-center justify-center space-x-3 mb-8">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/30 rounded-xl blur-xl" />
+                <img 
+                  src="/lovable-uploads/5fe141ed-a11c-4e31-85cc-a650afdddec2.png" 
+                  alt="Grow CV Logo" 
+                  className="h-12 w-12 relative"
+                />
               </div>
-            )}
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                E-mail
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="seu@email.com"
-              />
-              {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="senha" className="block text-sm font-medium text-gray-700 mb-2">
-                Senha
-              </label>
-              <input
-                type="password"
-                id="senha"
-                name="senha"
-                value={formData.senha}
-                onChange={handleInputChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.senha ? 'border-red-500' : 'border-gray-300'
-                }`}
-                placeholder="Sua senha"
-              />
-              {errors.senha && <p className="mt-1 text-sm text-red-600">{errors.senha}</p>}
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors disabled:opacity-50"
-            >
-              {loading ? 'Entrando...' : 'Entrar'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Não tem uma conta?{' '}
-              <Link to="/cadastro" className="text-blue-500 hover:text-blue-600 font-medium">
-                Cadastrar-se
-              </Link>
+              <span className="text-2xl font-display font-bold text-foreground">Grow CV</span>
+            </Link>
+            <h1 className="text-3xl sm:text-4xl font-display font-bold text-foreground mb-3">
+              Bem-vindo de volta
+            </h1>
+            <p className="text-muted-foreground">
+              Entre na sua conta para continuar
             </p>
           </div>
 
-          <div className="mt-4 text-center">
-            <Link to="/" className="text-gray-500 hover:text-gray-600 text-sm">
-              ← Voltar ao início
-            </Link>
+          {/* Form */}
+          <div className="glass-strong rounded-3xl p-8 opacity-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {errors.general && (
+                <div className="p-4 bg-destructive/10 border border-destructive/20 text-destructive rounded-xl text-sm">
+                  {errors.general}
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-foreground font-medium">
+                  E-mail
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className={`pl-12 py-6 bg-muted/50 border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary ${
+                      errors.email ? 'border-destructive' : ''
+                    }`}
+                    placeholder="seu@email.com"
+                  />
+                </div>
+                {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="senha" className="text-foreground font-medium">
+                  Senha
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    value={formData.senha}
+                    onChange={handleInputChange}
+                    className={`pl-12 py-6 bg-muted/50 border-border rounded-xl text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary ${
+                      errors.senha ? 'border-destructive' : ''
+                    }`}
+                    placeholder="Sua senha"
+                  />
+                </div>
+                {errors.senha && <p className="text-sm text-destructive">{errors.senha}</p>}
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full py-6 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl text-lg glow-primary hover-glow"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Entrando...
+                  </>
+                ) : (
+                  'Entrar'
+                )}
+              </Button>
+            </form>
+
+            <div className="mt-8 text-center space-y-4">
+              <p className="text-muted-foreground">
+                Não tem uma conta?{' '}
+                <Link to="/cadastro" className="text-primary hover:text-primary/80 font-semibold transition-colors">
+                  Criar conta grátis
+                </Link>
+              </p>
+              
+              <Link 
+                to="/" 
+                className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Voltar ao início
+              </Link>
+            </div>
           </div>
         </div>
       </div>
